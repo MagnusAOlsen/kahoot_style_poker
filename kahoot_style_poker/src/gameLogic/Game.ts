@@ -2,6 +2,7 @@
 import { Deck } from './Deck';
 import { Player } from './Player';
 import { Card } from './Card';
+import { HandEvaluator } from './HandEvalluator';
 
 export type GamePhase = 'pre-flop' | 'flop' | 'turn' | 'river' | 'showdown';
 
@@ -74,10 +75,28 @@ export class Game {
             break;
           case 'river':
             this.phase = 'showdown';
-            break;
-          case 'showdown':
-            console.warn("Round over. Start a new round.");
-            break;
+            case 'showdown':
+                console.log("SHOWDOWN!");
+                const rankings = this.players
+                  .filter(p => !p.hasFolded)
+                  .map(player => {
+                    const bestHand = HandEvaluator.bestOfSeven([...player.hand, ...this.communityCards]);
+                    return { player, hand: bestHand };
+                  })
+                  .sort((a, b) => HandEvaluator.compareHands(a.hand, b.hand));
+              
+                console.log("Results:");
+                rankings.forEach(({ player, hand }, i) => {
+                  console.log(
+                    `#${i + 1}: ${player.name} with ${hand.name} — ${hand.cards.map(c => c.toString()).join(', ')}`
+                  );
+                });
+                rankings[0].player.chips += this.getPot();
+                
+                
+              
+                break;
+              
         }
     }
 }

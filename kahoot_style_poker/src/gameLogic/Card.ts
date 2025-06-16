@@ -14,6 +14,6 @@ export class Card {
   
 
   toString(): string {
-    return `${this.suit}${this.rank}`;
+    return `${this.rank} of ${this.suit}`;
   }
 }
