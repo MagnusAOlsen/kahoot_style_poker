@@ -31,6 +31,10 @@ export class Player {
     this.hand = [...this.hand, ...cards];
   }
 
+  receiveChips(amount: number): void {
+    this.chips += amount;
+  }
+
 
   public async bet(leastBet: number, currentBet: number): Promise<number> {
     const input = await askQuestion(`How much do you wanna bet, ${this.name}? `);

@@ -2,10 +2,13 @@
 import { Deck } from './Deck';
 import { Player } from './Player';
 import { Card } from './Card';
-import { HandEvaluator } from './HandEvalluator';
+import { EvaluatedHand, HandEvaluator } from './HandEvalluator';
 
 export type GamePhase = 'pre-flop' | 'flop' | 'turn' | 'river' | 'showdown';
-
+export type Ranking = {
+  player: Player;
+  hand: EvaluatedHand;
+}
 
 export class Game {
   public deck: Deck = new Deck(); 
@@ -44,7 +47,7 @@ export class Game {
         this.currentBet = bet;
       }
       
-      this.pot += await bet;
+      this.pot += bet;
     }
   }
 
@@ -52,6 +55,41 @@ export class Game {
     console.log(this.pot)
     return this.pot;
   }
+
+  rankPlayers(): Ranking[] {
+    return this.players
+      .filter(p => !p.hasFolded)
+      .map(player => {
+        const bestHand = HandEvaluator.bestOfSeven([...player.hand, ...this.communityCards]);
+        return { player, hand: bestHand };
+      })
+      .sort((a, b) => HandEvaluator.compareHands(a.hand, b.hand));
+  }
+
+  payOut(ranking: Ranking[]): void {
+    console.log("Payout");
+    const winningHand = ranking[0].hand;
+    const allWinners: Player[] = [];
+
+    ranking.forEach(({ player, hand }) => {
+      if (HandEvaluator.compareHands(hand, winningHand) === 0) {
+        allWinners.push(player);
+      }
+  });
+
+  const share = this.getPot() / allWinners.length;
+  allWinners.forEach(player => {
+    player.receiveChips(share);
+  });
+
+  console.log('Results');
+  ranking.forEach(({ player, hand }, i) => {
+    console.log(
+      `#${i + 1}: ${player.name} with ${hand.name} — ${hand.cards.map(c => c.toString()).join(', ')} with number of chips: ${player.chips}`
+    );
+  });
+}
+
 
   getCommunityCards(): Card[] {
     console.log(this.communityCards)
@@ -77,24 +115,12 @@ export class Game {
             this.phase = 'showdown';
             case 'showdown':
                 console.log("SHOWDOWN!");
-                const rankings = this.players
-                  .filter(p => !p.hasFolded)
-                  .map(player => {
-                    const bestHand = HandEvaluator.bestOfSeven([...player.hand, ...this.communityCards]);
-                    return { player, hand: bestHand };
-                  })
-                  .sort((a, b) => HandEvaluator.compareHands(a.hand, b.hand));
-              
-                console.log("Results:");
-                rankings.forEach(({ player, hand }, i) => {
-                  console.log(
-                    `#${i + 1}: ${player.name} with ${hand.name} — ${hand.cards.map(c => c.toString()).join(', ')}`
-                  );
-                });
-                rankings[0].player.chips += this.getPot();
+                const ranking = this.rankPlayers();
+                this.payOut(ranking);
+                for (const player of this.players) {
+                    console.log(player.chips);
+                }
                 
-                
-              
                 break;
               
         }
