@@ -1,7 +1,14 @@
 import poker_chips from "../assets/poker_chips.png";
 import card_backside from "../assets/card_backside.png";
 
-function Player({ x, y }) {
+type PlayerProps = {
+  x: number;
+  y: number;
+  name: string;
+  chips?: number;
+};
+
+function Player({ x, y, name, chips }: PlayerProps) {
   return (
     <div
       className="player"
@@ -18,7 +25,8 @@ function Player({ x, y }) {
         <img src={card_backside} style={{ width: "25px" }} />
         <img src={card_backside} style={{ width: "25px" }} />
       </div>
-      <h2 style={{ color: "black" }}>Player x</h2>
+      <h2 style={{ color: "black" }}>{name}</h2>
+      <h2 style={{ color: "black" }}>Total chips: {chips}</h2>
     </div>
   );
 }

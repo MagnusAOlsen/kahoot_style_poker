@@ -1,38 +1,32 @@
 import Aces from "../components/Aces";
 import UserNameField from "../components/UsernameField";
 import { useState, useEffect, useRef } from "react";
-import { Player } from "../gameLogic/Player";
 
 function PlayerLogin() {
-  /* const [player, setPlayer] = useState<Player>(() => {
-    const storedName = localStorage.getItem("currentPlayer");
-    if (storedName) {
-      return new Player(storedName);
-    }
-    return new Player("");
-  }); */
-
-  const [playerName, setPlayerName] = useState(""); /* => {
-    const storedName = localStorage.getItem("currentPlayer");
+  const [playerName, setPlayerName] = useState(() => {
+    const storedName = sessionStorage.getItem("currentPlayer");
     if (storedName) {
       return storedName;
     }
     return "";
-  }); */
+  });
 
-  const [isReady, setIsReady] = useState(false); /* => {
-    const storedReady = localStorage.getItem("ready");
+  const [isReady, setIsReady] = useState(() => {
+    const storedReady = sessionStorage.getItem("ready");
     if (storedReady === "true") {
       return true;
     }
     return false;
-  }); */
+  });
 
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    localStorage.setItem("ready", isReady.toString());
-    localStorage.setItem("currentPlayer", playerName);
+    if (!sessionStorage.getItem("ready")) {
+      sessionStorage.clear();
+    }
+    sessionStorage.setItem("ready", isReady.toString());
+    sessionStorage.setItem("currentPlayer", playerName);
     const socket = new WebSocket("ws://localhost:3000");
     socketRef.current = socket;
 
@@ -41,13 +35,11 @@ function PlayerLogin() {
 
   const handleSubmit = (name: string) => {
     if (!socketRef.current || !name) return;
-    localStorage.setItem("currentPlayer", name);
+    sessionStorage.setItem("currentPlayer", name);
     setPlayerName(name);
-    localStorage.setItem("ready", "true");
+    sessionStorage.setItem("ready", "true");
     setIsReady(true);
-    /* setPlayer(new Player(name)); */
     socketRef.current.send(JSON.stringify({ type: "join", name: name }));
-    setIsReady(true);
   };
 
   return (

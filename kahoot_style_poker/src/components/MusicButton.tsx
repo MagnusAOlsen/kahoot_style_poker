@@ -1,3 +1,6 @@
+import React from "react";
+import musicImage from "../assets/music_image.png";
+
 function MusicButton() {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
@@ -17,8 +20,11 @@ function MusicButton() {
     <div className="music-button">
       <button onClick={toggleMusic}>
         {isPlaying ? "Pause Music" : "Play Music"}
+        <img src={musicImage} alt="Music Icon" />
       </button>
       <audio ref={audioRef} loop />
     </div>
   );
 }
+
+export default MusicButton;

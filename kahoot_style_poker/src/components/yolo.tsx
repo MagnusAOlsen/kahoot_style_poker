@@ -6,46 +6,38 @@ type PlayingProps = {
   playersPlaying: string[];
 };
 
-function Playing({ playersPlaying }: PlayingProps) {
+function Playing(/* { playersPlaying }: PlayingProps */) {
   const centerX = 800;
   const centerY = 440;
 
-  const curveRadiusX = 150;
-  const curveRadiusY = 160;
+  const curveRadiusX = 150; // horizontal size of curve
+  const curveRadiusY = 160; // vertical curve size
   const bottomPlayerSpacing = 250;
 
-  const totalSeats = 8;
-  const seatPositions: { x: number; y: number }[] = [];
+  const players = [];
 
-  // Pre-calculate the seat positions for up to 8 players
-  // 🟢 Left curve (seats 0-1)
+  // 🟢 Left curve: angles from 180° to 270°
   for (let i = 0; i < 2; i++) {
     const angle = Math.PI + (i / 1) * (Math.PI / 2); // 180° to 270°
-    const x = centerX - 350 + curveRadiusX * Math.cos(angle);
+    const x = centerX - 350 + curveRadiusX * Math.cos(angle); // left offset
     const y = centerY + curveRadiusY * Math.sin(angle);
-    seatPositions.push({ x, y });
+    players.push(<Player key={`left-${i}`} x={x} y={y} />);
   }
 
-  // 🟢 Bottom line (seats 2–5)
+  // 🟢 Bottom straight line
   for (let i = 0; i < 4; i++) {
     const x = centerX - 1.5 * bottomPlayerSpacing + i * bottomPlayerSpacing;
     const y = centerY + curveRadiusY;
-    seatPositions.push({ x, y });
+    players.push(<Player key={`bottom-${i}`} x={x} y={y} />);
   }
 
-  // 🟢 Right curve (seats 6–7)
+  // 🟢 Right curve: angles from 270° to 360°
   for (let i = 0; i < 2; i++) {
     const angle = 1.5 * Math.PI + (i / 1) * (Math.PI / 2); // 270° to 360°
-    const x = centerX + 350 + curveRadiusX * Math.cos(angle);
+    const x = centerX + 350 + curveRadiusX * Math.cos(angle); // right offset
     const y = centerY + curveRadiusY * Math.sin(angle);
-    seatPositions.push({ x, y });
+    players.push(<Player key={`right-${i}`} x={x} y={y} />);
   }
-
-  // 🎯 Use only as many positions as players
-  const players = playersPlaying.map((name, i) => {
-    const { x, y } = seatPositions[i];
-    return <Player key={i} x={x} y={y} name={name} />;
-  });
 
   return (
     <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>

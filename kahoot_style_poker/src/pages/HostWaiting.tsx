@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import PokerBackground from "../components/PokerBackground";
 import LoginField from "../components/LoginField";
+import React from "react";
+import StartGameButton from "../components/StartGameButton";
+import MusicButton from "../components/MusicButton";
 
 function HostWaiting() {
   console.log("HostWaiting component rendered");
@@ -38,18 +41,27 @@ function HostWaiting() {
   }, []);
 
   return (
-    <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
-      <PokerBackground />
-      <LoginField currentPlayers={currentPlayers} />
-      <div className="player-list">
-        <h3>Current Players:</h3>
-        <ul>
-          {currentPlayers.map((player, i) => (
-            <li key={i}>{player}</li>
-          ))}
-        </ul>
+    <>
+      <div
+        className="QR-code-and-players"
+        style={{ position: "relative", height: "100vh", overflow: "hidden" }}
+      >
+        <PokerBackground />
+        <LoginField currentPlayers={currentPlayers} />
+        <div className="player-list">
+          <h3>Current Players:</h3>
+          <ul>
+            {currentPlayers.map((player, i) => (
+              <li key={i}>{player}</li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
+      <div className="start-page-buttons">
+        <StartGameButton currentPlayers={currentPlayers} />
+        <MusicButton />
+      </div>
+    </>
   );
 }
 

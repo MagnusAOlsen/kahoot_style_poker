@@ -1,4 +1,3 @@
-// src/game/Player.ts
 import * as readline from 'readline';
 import { Card } from './Card.ts';
 
