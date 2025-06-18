@@ -21,6 +21,7 @@ export class Player {
   chips: number;
   name: string;
   hasFolded: boolean = false;
+  position: number;
 
   constructor(name: string, startingChips: number = 1000) {
     this.name = name;
