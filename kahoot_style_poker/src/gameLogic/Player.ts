@@ -1,6 +1,6 @@
 // src/game/Player.ts
 import * as readline from 'readline';
-import { Card } from './Card';
+import { Card } from './Card.ts';
 
 function askQuestion(query: string): Promise<string> {
     const rl = readline.createInterface({

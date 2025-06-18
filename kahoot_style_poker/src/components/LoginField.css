@@ -15,4 +15,39 @@
     width: 200px;
     height: 200px;
   }
+
+
   
+.login-field ul {
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 10px;
+
+  justify-content: center;
+
+  list-style-type: none;
+
+  padding: 0;
+
+}
+
+
+
+.login-field li {
+
+  font-family: Arial, sans-serif;
+
+  font-size: 16px;
+
+  text-align: center;
+
+  padding: 10px;
+
+  background-color: #f0f0f0;
+
+  border-radius: 5px;
+
+}

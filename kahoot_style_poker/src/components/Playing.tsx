@@ -1,6 +1,6 @@
 import PokerBackground from "./PokerBackground";
 import deck_of_cards from "../assets/deck_of_cards.png";
-import Player from "./Player";
+import Player from "./PlayerOnBoard";
 
 function Playing() {
   const centerX = 800;
