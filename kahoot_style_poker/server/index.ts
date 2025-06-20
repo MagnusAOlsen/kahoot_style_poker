@@ -10,24 +10,29 @@ function main() {
   const wss = new WebSocketServer({ server });
   
   let players: Player[] = [];
+  const clients = new Map<WebSocket, string>();
   
   wss.on('connection', (socket) => {
+    
     socket.on('message', (msg) => {
       const data = JSON.parse(msg.toString());
+      console.log("Received message:", data);
+      console.log(clients.size);
     
   
       if (data.type === 'join') {
           const existingPlayer = players.find(p => p.name === data.name);
         
-          if (!existingPlayer) {
+          if (!existingPlayer && players.length < 8) {
             const newPlayer = new Player(data.name);
             players.push(newPlayer);
           }
+          clients.set(socket, data.name);
         
           // Create a list of just player names to send to clients
-          const playerNames = players.map(p => p.name);
+          /* const playerNames = players.map(p => p.name); */
         
-          const update = JSON.stringify({ type: 'players', players: playerNames });
+          const update = JSON.stringify({ type: 'players', players: players });
         
           wss.clients.forEach((client) => {
             if (client.readyState === socket.OPEN) {
@@ -35,8 +40,20 @@ function main() {
               client.send(update);
             }
           })
-        }
+        } 
+
+      else if (data.type === 'startGame') {
         
+        console.log("Starting game with players:", players);
+ 
+        clients.forEach((name, clientSocket) => {
+          const player = players.find(p => p.name === name);
+          if (player && clientSocket.readyState === WebSocket.OPEN) {
+            clientSocket.send(JSON.stringify({ type: "gameStarted", player }));
+            console.log(`Game started for player: ${player.name}`);
+          }
+        });
+      }
     });
   });
   

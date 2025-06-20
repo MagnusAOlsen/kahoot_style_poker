@@ -1,8 +1,12 @@
 import Aces from "../components/Aces";
 import UserNameField from "../components/UsernameField";
 import { useState, useEffect, useRef } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Player } from "../gameLogic/Player";
 
 function PlayerLogin() {
+  const navigate = useNavigate();
   const [playerName, setPlayerName] = useState(() => {
     const storedName = sessionStorage.getItem("currentPlayer");
     if (storedName) {
@@ -19,6 +23,8 @@ function PlayerLogin() {
     return false;
   });
 
+  const [connected, setConnected] = useState(true);
+
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -29,6 +35,16 @@ function PlayerLogin() {
     sessionStorage.setItem("currentPlayer", playerName);
     const socket = new WebSocket("ws://localhost:3000");
     socketRef.current = socket;
+
+    socket.onmessage = (msg) => {
+      console.log("Received message from server:", msg.data);
+      const data = JSON.parse(msg.data);
+      if (data.type === "gameStarted") {
+        console.log(data.player);
+        console.log(playerName);
+        navigate("/PlayerPlaying", { state: { myPlayer: data.player } });
+      }
+    };
 
     return () => socket.close();
   }, []);

@@ -62,3 +62,59 @@ function Playing(/* { playersPlaying }: PlayingProps */) {
 }
 
 export default Playing;
+
+import PokerBackground from "./PokerBackground";
+import deck_of_cards from "../assets/deck_of_cards.png";
+import Player from "./PlayerOnBoard";
+
+type PlayingProps = {
+  playersPlaying: string[];
+};
+
+function Playing({ playersPlaying }: PlayingProps) {
+  const centerX = 800;
+  const centerY = 440;
+  const radius = 300;
+
+  const playerCount = playersPlaying.length;
+  const angleStart = Math.PI;
+  const angleEnd = 2 * Math.PI;
+  const angleStep = (angleEnd - angleStart) / Math.max(playerCount - 1, 1);
+
+  const players = playersPlaying.map((name, i) => {
+    const angle = angleStart + i * angleStep;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+
+    return (
+      <Player
+        key={i}
+        x={x}
+        y={y}
+        name={name}
+        // Optional: chips={startingChips}
+      />
+    );
+  });
+
+  return (
+    <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
+      <PokerBackground />
+      <img
+        src={deck_of_cards}
+        alt="Deck"
+        style={{
+          position: "absolute",
+          width: "70px",
+          top: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 5,
+        }}
+      />
+      {players}
+    </div>
+  );
+}
+
+export default Playing;

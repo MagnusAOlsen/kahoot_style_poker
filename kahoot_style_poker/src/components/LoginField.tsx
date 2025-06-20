@@ -1,8 +1,9 @@
 import React from "react";
 import "./LoginField.css";
+import Player from "../gameLogic/Player";
 
 type LoginFieldProps = {
-  currentPlayers: string[];
+  currentPlayers: Player[];
 };
 
 function LoginField({ currentPlayers }: LoginFieldProps) {
@@ -16,11 +17,11 @@ function LoginField({ currentPlayers }: LoginFieldProps) {
         <h2>Current Players:</h2>
         <ul>
           {currentPlayers.map((player, index) => (
-            <li key={index}>{player}</li>
+            <li key={index}>{player.name}</li>
           ))}
         </ul>
-
-        <p>Waiting for players to join...</p>
+        {currentPlayers.length < 8 && <p>Waiting for players to join...</p>}
+        {currentPlayers.length == 8 && <p>Lobby full! Let's start</p>}
       </div>
       <button className="startGame" />
     </>

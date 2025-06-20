@@ -1,15 +1,18 @@
 import React from "react";
 import startIcon from "../assets/play_button.png";
 import { useNavigate } from "react-router-dom";
+import { Player } from "../gameLogic/Player";
 
 type Props = {
-  currentPlayers: string[];
+  currentPlayers: Player[];
+  onStartGame: () => void;
 };
 
-function StartGameButton({ currentPlayers }: Props) {
+function StartGameButton({ currentPlayers, onStartGame }: Props) {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    onStartGame();
     navigate("/HostPlaying", { state: { currentPlayers } });
   };
 
