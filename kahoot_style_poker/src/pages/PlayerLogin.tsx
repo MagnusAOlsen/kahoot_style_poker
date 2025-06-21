@@ -33,7 +33,7 @@ function PlayerLogin() {
     }
     sessionStorage.setItem("ready", isReady.toString());
     sessionStorage.setItem("currentPlayer", playerName);
-    const socket = new WebSocket("ws://localhost:3000");
+    const socket = new WebSocket("ws://192.168.86.28:3000");
     socketRef.current = socket;
 
     socket.onmessage = (msg) => {

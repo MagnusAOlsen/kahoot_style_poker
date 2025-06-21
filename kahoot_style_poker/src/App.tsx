@@ -3,6 +3,7 @@ import HostWaiting from "./pages/HostWaiting";
 import HostPlaying from "./pages/HostPlaying";
 import PlayerPlaying from "./pages/PlayerPlaying";
 import PlayerLogin from "./pages/PlayerLogin";
+import React from "react";
 
 function App() {
   return (

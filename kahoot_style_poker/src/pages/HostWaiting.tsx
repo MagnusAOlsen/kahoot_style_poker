@@ -23,7 +23,7 @@ function HostWaiting() {
   useEffect(() => {
     localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
     console.log("Conecting to WebSocket server...");
-    const socket = new WebSocket("ws://localhost:3000");
+    const socket = new WebSocket("ws://192.168.86.28:3000");
     socketRef.current = socket;
 
     socket.onmessage = (msg) => {

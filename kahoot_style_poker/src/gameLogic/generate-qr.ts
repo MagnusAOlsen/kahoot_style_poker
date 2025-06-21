@@ -3,9 +3,11 @@ import QRCode from 'qrcode';
 import ip from 'ip';
 import fs from 'fs';
 
+
 /* const localIP = ip.address(); // e.g. 192.168.1.42 */
-const localIP = '195.88.55.16';
-const url = `http://${localIP}`;
+const localIP = '192.168.86.28';
+const port = 5173;
+const url = `http://${localIP}:${port}/PlayerLogin`;
 
 const outputPath = '../../public/qr-code.png'; // Save in public so React can access it
 
