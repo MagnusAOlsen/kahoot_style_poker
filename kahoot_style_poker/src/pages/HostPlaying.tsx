@@ -29,9 +29,6 @@ function HostPlaying() {
       if (data.type === "playerMove") {
         setCurrentPlayers(data.players);
         sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
-      } else if (data.type === "playerMoves") {
-        setCurrentPlayers(data.players);
-        sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
       }
     };
 

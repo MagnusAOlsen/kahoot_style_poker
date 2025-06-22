@@ -54,11 +54,53 @@ function main() {
           }
         });
       }
+
+      else if (data.type === 'reconnect') {
+        const playerName = data.name;
+        const existingPlayer = players.find(p => p.name === playerName);
+      
+        if (existingPlayer) {
+          // Remove any old sockets mapped to the same player name
+          for (const [sock, name] of clients.entries()) {
+            if (name === playerName && sock !== socket) {
+              clients.delete(sock);
+              sock.close(); // Optional: force disconnect of stale socket
+            }
+          }
+      
+          // Register the new socket
+          clients.set(socket, playerName);
+      
+          // Send the player data back
+          socket.send(JSON.stringify({ type: 'player', player: existingPlayer }));
+          console.log(`Reconnected player: ${playerName}`);
+        }
+      }
+
+      else if (data.type === "raise") {
+        //Check which socket it is sent from, then find corresponding playername in clients map
+        const playerName = clients.get(socket);
+        const raiseAmount = data.amount;
+        const player = players.find(p => p.name === playerName);
+        
+        if (player) {
+          player.chips -= raiseAmount;
+          console.log(`${playerName} raised by ${raiseAmount}. Remaining chips: ${player.chips}`);
+          socket.send(JSON.stringify({ type: 'player', player }));
+          
+          // Broadcast the updated player state to all clients
+          wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({ type: 'playerMove', players }));
+            }
+          });
+        }
+      }
     });
   });
   
   server.listen(3000, () => {
-    console.log('Server listening on http://localhost:3000');
+    console.log('Server listening on http://192.168.86.28:3000');
   });
 
 }

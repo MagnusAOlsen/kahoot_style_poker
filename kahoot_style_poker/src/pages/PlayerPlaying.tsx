@@ -62,6 +62,7 @@ function PlayerPlaying() {
   };
   const handleFold = () => {
     setShowFoldedCards(true);
+    setIsFoldActive(true);
   };
 
   return (
@@ -77,11 +78,15 @@ function PlayerPlaying() {
           <p>{secondCard?.toString()}</p>
         </div>
       </div>
-      <button onClick={call}>Call</button>
-      <button onClick={handleRaise}>Raise</button>
-      <button onClick={handleFold}>Fold</button>
+      {!isRaiseActive && !isFoldActive && (
+        <div>
+          <button onClick={call}>Call</button>
+          <button onClick={handleRaise}>Raise</button>
+          <button onClick={handleFold}>Fold</button>
+        </div>
+      )}
 
-      {showFoldedCards && (
+      {showFoldedCards && isFoldActive && (
         <div className="FoldDiv">
           {twoPlayersRemainding && (
             <div>
