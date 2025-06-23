@@ -1,8 +1,9 @@
 // src/game/Game.ts
-import { Deck } from './Deck';
-import { Player } from './Player';
-import { Card } from './Card';
-import { EvaluatedHand, HandEvaluator } from './HandEvalluator';
+import { Deck } from './Deck.ts';
+import { Player } from './Player.ts';
+import { Card } from './Card.ts';
+import { HandEvaluator } from './HandEvaluator.ts';
+import type { EvaluatedHand } from './HandEvaluator.ts';
 
 export type GamePhase = 'pre-flop' | 'flop' | 'turn' | 'river' | 'showdown';
 export type Ranking = {
@@ -18,9 +19,10 @@ export class Game {
   private phase: GamePhase = 'pre-flop';
   private currentBet: number = 0;
   private isFirstRound: Boolean = true;
+  public currentPlayer: Player | null = null;
 
   constructor(players: Player[]) {
-    this.players = players.map(player => new Player(player.name));
+    this.players = players;
   }
 
   startNewRound(): void {
@@ -42,12 +44,14 @@ export class Game {
 
   async collectBets(): Promise<void> {
     for (const player of this.players.filter(p => !p.hasFolded)) {
+      const currentPlayer = player.name;
       const bet = await player.bet(this.currentBet, this.currentBet);
       if (this.currentBet === 0 && bet !== 0) {
         this.currentBet = bet;
       }
       
       this.pot += bet;
+      console.log(`${currentPlayer} bets ${bet} chips. Current pot: ${this.pot}`);
     }
   }
 

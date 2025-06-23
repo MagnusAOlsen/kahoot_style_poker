@@ -1,6 +1,6 @@
 import React from "react";
 import "./LoginField.css";
-import Player from "../gameLogic/Player";
+import Player from "../gameLogic/Player.ts";
 
 type LoginFieldProps = {
   currentPlayers: Player[];

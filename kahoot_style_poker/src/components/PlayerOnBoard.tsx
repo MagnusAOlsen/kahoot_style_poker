@@ -1,6 +1,6 @@
 import poker_chips from "../assets/poker_chips.png";
 import card_backside from "../assets/card_backside.png";
-import { Player } from "../gameLogic/Player";
+import { Player } from "../gameLogic/Player.ts";
 
 type PlayerProps = {
   x: number;

@@ -4,7 +4,7 @@ import LoginField from "../components/LoginField";
 import React from "react";
 import StartGameButton from "../components/StartGameButton";
 import MusicButton from "../components/MusicButton";
-import { Player } from "../gameLogic/Player";
+import { Player } from "../gameLogic/Player.ts";
 
 function HostWaiting() {
   console.log("HostWaiting component rendered");

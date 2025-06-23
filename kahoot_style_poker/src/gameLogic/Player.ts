@@ -1,7 +1,7 @@
 import * as readline from 'readline';
 import { Card } from './Card.ts';
 
-function askQuestion(query: string): Promise<string> {
+/* function askQuestion(query: string): Promise<string> {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -13,7 +13,7 @@ function askQuestion(query: string): Promise<string> {
         resolve(answer);
       })
     );
-  }
+  } */
 
 export class Player {
   hand: Card[] = [];
@@ -21,6 +21,8 @@ export class Player {
   name: string;
   hasFolded: boolean = false;
   position: number;
+  private resolveBet?: (amount: number) => void;
+  public notifyTurn?: (playerName: string) => void;
 
   constructor(name: string, startingChips: number = 1000) {
     this.name = name;
@@ -41,10 +43,32 @@ export class Player {
 
 
   public async bet(leastBet: number, currentBet: number): Promise<number> {
-    const input = await askQuestion(`How much do you wanna bet, ${this.name}? `);
-    const amount = parseInt(input, 10);
+    if (this.notifyTurn) {
+      this.notifyTurn(this.name);
+    }
 
-    if (isNaN(amount) || amount < 0) {
+    return new Promise((resolve) => {
+      this.resolveBet = (amount: number) => {
+        if (amount === 0 && currentBet !== 0) {
+          this.fold();
+          resolve(0);}
+        else {
+          const bet = Math.max(Math.min(amount, this.chips), leastBet);
+          this.chips -= bet;
+          resolve(bet);
+        }
+      };
+    });
+  }
+
+  respondToBet(amount: number): void {
+    if (this.resolveBet) {
+      this.resolveBet(amount);
+      this.resolveBet = undefined; 
+    }
+  }
+
+    /* if (isNaN(amount) || amount < 0) {
       console.log("Invalid input. Betting 0.");
       return 0;
     }
@@ -58,7 +82,7 @@ export class Player {
     this.chips -= bet;
     console.log(this.name + " betted " + bet + " kr" )
     return bet;
-  }
+  } */
 
   fold(): void {
     this.hand = [];
@@ -68,5 +92,6 @@ export class Player {
   resetHand(): void {
     this.hand = [];
     this.hasFolded = false;
+    this.resolveBet = undefined; // Reset the bet resolver
   }
 }

@@ -1,13 +1,17 @@
 import PokerBackground from "./PokerBackground";
 import deck_of_cards from "../assets/deck_of_cards.png";
 import PlayerOnBoard from "./PlayerOnBoard";
-import { Player } from "../gameLogic/Player";
+import { Player } from "../gameLogic/Player.ts";
+import React from "react";
+import HA from "../assets/cards/HA.png";
+import { Card } from "../gameLogic/Card.ts";
 
 type PlayingProps = {
   playersPlaying: Player[];
+  communityCards?: Card[];
 };
 
-function Playing({ playersPlaying }: PlayingProps) {
+function Playing({ playersPlaying, communityCards }: PlayingProps) {
   const centerX = 800;
   const centerY = 440;
 
@@ -48,6 +52,10 @@ function Playing({ playersPlaying }: PlayingProps) {
     return <PlayerOnBoard key={i} x={x} y={y} player={player} />;
   });
 
+  const getCardImage = (card: Card): string => {
+    return `../cards/${card.suit[0].toUpperCase()}${card.rank}.png`;
+  };
+
   return (
     <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
       <PokerBackground />
@@ -64,6 +72,24 @@ function Playing({ playersPlaying }: PlayingProps) {
           zIndex: 5,
         }}
       />
+      <div
+        className="communityCards"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 5,
+        }}
+      >
+        {communityCards?.map((card, i) => (
+          <img
+            key={i}
+            src={getCardImage(card)}
+            style={{ width: "80px", marginRight: "10px" }}
+          />
+        ))}
+      </div>
 
       {players}
     </div>

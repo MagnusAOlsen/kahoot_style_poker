@@ -1,8 +1,9 @@
 import Playing from "../components/Playing";
 import { useLocation } from "react-router-dom";
-import { Player } from "../gameLogic/Player";
+import { Player } from "../gameLogic/Player.ts";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
+import { Card } from "../gameLogic/Card.ts";
 
 function HostPlaying() {
   const location = useLocation();
@@ -13,10 +14,7 @@ function HostPlaying() {
       (JSON.parse(sessionStorage.getItem("currentPlayers") || "{}") as Player[])
     );
   });
-  const [showFoldedFirstCard, setShowFoldedFirstCard] =
-    useState<boolean>(false);
-  const [showFoldedSecondCard, setShowFoldedSecondCard] =
-    useState<boolean>(false);
+  const [communityCards, setCommunityCards] = useState<Card[]>([]);
 
   useEffect(() => {
     localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
@@ -29,6 +27,12 @@ function HostPlaying() {
       if (data.type === "playerMove") {
         setCurrentPlayers(data.players);
         sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
+      } else if (data.type === "communityCards") {
+        setCommunityCards(data.cards);
+        sessionStorage.setItem("communityCards", JSON.stringify(data.cards));
+      } else if (data.type === "players") {
+        setCurrentPlayers(data.players);
+        sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
       }
     };
 
@@ -37,7 +41,10 @@ function HostPlaying() {
 
   return (
     <div>
-      <Playing playersPlaying={currentPlayers} />
+      <Playing
+        playersPlaying={currentPlayers}
+        communityCards={communityCards}
+      />
     </div>
   );
 }

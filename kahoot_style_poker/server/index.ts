@@ -1,109 +1,163 @@
 import { WebSocketServer } from 'ws';
 import http from 'http';
 import { Player } from "../src/gameLogic/Player.ts";
+import { Game } from "../src/gameLogic/Game.ts";
 
+async function broadcast(wss, message) {
+  const msg = JSON.stringify(message);
+  wss.clients.forEach(client => {
+    if (client.readyState === client.OPEN) {
+      client.send(msg);
+    }
+  });
+}
 
+async function playRound(game, wss, clients) {
+  game.startNewRound();
+  for (const [socket, name] of clients.entries()) {
+    const player = game.players.find(p => p.name === name);
+    if (player && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'player', player }));
+    }
+  }
+  
+  broadcast(wss, { type: "roundStarted" });
 
+  for (const player of game.players) {
+    player.notifyTurn = (playerName) => {
+      const socket = [...clients.entries()].find(([_, name]) => name === playerName)?.[0];
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'yourTurn' }));
+      }
+    };
+  }
+
+  for (let i = 0; i < 4; i++) {
+    await game.collectBets();
+    game.nextPhase();
+    broadcast(wss, { type: "communityCards", cards: game.getCommunityCards() });
+  }
+
+  const rankings = game.rankPlayers();
+  game.payOut(rankings);
+  broadcast(wss, { type: "roundOver", rankings });
+}
 
 function main() {
   const server = http.createServer();
   const wss = new WebSocketServer({ server });
-  
+
   let players: Player[] = [];
-  const clients = new Map<WebSocket, string>();
-  
+  const clients = new Map();
+  let game: Game | null = null;
+
   wss.on('connection', (socket) => {
-    
     socket.on('message', (msg) => {
       const data = JSON.parse(msg.toString());
-      console.log("Received message:", data);
-      console.log(clients.size);
-    
-  
-      if (data.type === 'join') {
-          const existingPlayer = players.find(p => p.name === data.name);
-        
-          if (!existingPlayer && players.length < 8) {
+      const playerName = clients.get(socket);
+      const player = players.find(p => p.name === playerName);
+
+      switch (data.type) {
+        case 'join': {
+          console.log("MAMMAMIA")
+          if (!players.find(p => p.name === data.name) && players.length < 8) {
             const newPlayer = new Player(data.name);
             players.push(newPlayer);
+            console.log("Player joined:", data.name);
+            console.log(players)
           }
           clients.set(socket, data.name);
-        
-          // Create a list of just player names to send to clients
-          /* const playerNames = players.map(p => p.name); */
-        
-          const update = JSON.stringify({ type: 'players', players: players });
-        
-          wss.clients.forEach((client) => {
-            if (client.readyState === socket.OPEN) {
-              console.log("Sending update to client:", update);
-              client.send(update);
-            }
-          })
-        } 
-
-      else if (data.type === 'startGame') {
-        
-        console.log("Starting game with players:", players);
- 
-        clients.forEach((name, clientSocket) => {
-          const player = players.find(p => p.name === name);
-          if (player && clientSocket.readyState === WebSocket.OPEN) {
-            clientSocket.send(JSON.stringify({ type: "gameStarted", player }));
-            console.log(`Game started for player: ${player.name}`);
-          }
-        });
-      }
-
-      else if (data.type === 'reconnect') {
-        const playerName = data.name;
-        const existingPlayer = players.find(p => p.name === playerName);
-      
-        if (existingPlayer) {
-          // Remove any old sockets mapped to the same player name
-          for (const [sock, name] of clients.entries()) {
-            if (name === playerName && sock !== socket) {
-              clients.delete(sock);
-              sock.close(); // Optional: force disconnect of stale socket
-            }
-          }
-      
-          // Register the new socket
-          clients.set(socket, playerName);
-      
-          // Send the player data back
-          socket.send(JSON.stringify({ type: 'player', player: existingPlayer }));
-          console.log(`Reconnected player: ${playerName}`);
+          broadcast(wss, { type: 'players', players });
+          console.log(clients)
+          break;
         }
-      }
 
-      else if (data.type === "raise") {
-        //Check which socket it is sent from, then find corresponding playername in clients map
-        const playerName = clients.get(socket);
-        const raiseAmount = data.amount;
-        const player = players.find(p => p.name === playerName);
-        
-        if (player) {
-          player.chips -= raiseAmount;
-          console.log(`${playerName} raised by ${raiseAmount}. Remaining chips: ${player.chips}`);
-          socket.send(JSON.stringify({ type: 'player', player }));
+        case 'startGame': {
+          console.log("Starting game with players:", players.map(p => p.name));
+          game = new Game(players);
+          broadcast(wss, { type: 'gameStarted' });
+          setTimeout(() => playRound(game, wss, clients), 500);
+          break;
+        }
+
+        /* case 'startGame': {
+          console.log("Starting game loop with players:", players.map(p => p.name));
           
-          // Broadcast the updated player state to all clients
-          wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-              client.send(JSON.stringify({ type: 'playerMove', players }));
+          if (!game) {
+            game = new Game(players); // Only create the Game instance once
+          }
+        
+          const loopRounds = async () => {
+            while (true) {
+              await broadcast(wss, { type: 'gameStarted' });
+        
+              await playRound(game, wss, clients);
+        
+              await new Promise(resolve => setTimeout(resolve, 1000)); // small pause between rounds
             }
-          });
+          };
+        
+          loopRounds();
+          break;
+        } */
+
+        case 'reconnect': {
+          const reconnectingName = data.name;
+          const reconnectingPlayer = players.find(p => p.name === reconnectingName);
+          console.log("Reconnecting player:", reconnectingPlayer);
+          if (reconnectingPlayer) {
+            for (const [sock, name] of clients.entries()) {
+              if (name === data.name && sock !== socket) {
+                clients.delete(sock);
+                sock.close();
+              }
+            }
+            console.log("Player reconnected:", data.name);
+            clients.set(socket, data.name);
+            socket.send(JSON.stringify({ type: 'player', player: reconnectingPlayer, isMyTurn: game?.currentPlayer?.name === reconnectingName }));
+          }
+          break;
         }
+
+        case 'raise': {
+          if (player) {
+            player.respondToBet(data.amount);
+              socket.send(JSON.stringify({ type: 'player', player }));
+              broadcast(wss, { type: 'players', players: players });
+          }
+          break;
+        }
+
+        case 'call': {
+          if (player) {
+
+            player.respondToBet(-1);
+              socket.send(JSON.stringify({ type: 'player', player }));
+              broadcast(wss, { type: 'players', players: players });
+           
+          }
+          break;
+        }
+
+        case 'fold': {
+          if (player) {
+            player.respondToBet(0);
+            socket.send(JSON.stringify({ type: 'player', player }));
+            broadcast(wss, { type: 'players', players: players });
+            
+          }
+          break;
+        }
+
+        default:
+          console.log("Unknown message type:", data.type);
       }
     });
   });
-  
+
   server.listen(3000, () => {
     console.log('Server listening on http://192.168.86.28:3000');
   });
-
 }
-
 
 main();

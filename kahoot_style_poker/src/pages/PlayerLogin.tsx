@@ -3,27 +3,17 @@ import UserNameField from "../components/UsernameField";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Player } from "../gameLogic/Player";
+import { Player } from "../gameLogic/Player.ts";
 
 function PlayerLogin() {
   const navigate = useNavigate();
   const [playerName, setPlayerName] = useState(() => {
-    const storedName = sessionStorage.getItem("currentPlayer");
-    if (storedName) {
-      return storedName;
-    }
-    return "";
+    return sessionStorage.getItem("currentPlayer") || "";
   });
 
   const [isReady, setIsReady] = useState(() => {
-    const storedReady = sessionStorage.getItem("ready");
-    if (storedReady === "true") {
-      return true;
-    }
-    return false;
+    return sessionStorage.getItem("ready") === "true";
   });
-
-  const [connected, setConnected] = useState(true);
 
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -31,17 +21,16 @@ function PlayerLogin() {
     if (!sessionStorage.getItem("ready")) {
       sessionStorage.clear();
     }
+
     sessionStorage.setItem("ready", isReady.toString());
     sessionStorage.setItem("currentPlayer", playerName);
+
     const socket = new WebSocket("ws://192.168.86.28:3000");
     socketRef.current = socket;
 
     socket.onmessage = (msg) => {
-      console.log("Received message from server:", msg.data);
       const data = JSON.parse(msg.data);
       if (data.type === "gameStarted") {
-        console.log(data.player);
-        console.log(playerName);
         navigate("/PlayerPlaying", { state: { myPlayer: data.player } });
       }
     };
@@ -51,29 +40,36 @@ function PlayerLogin() {
 
   const handleSubmit = (name: string) => {
     if (!socketRef.current || !name) return;
+
     sessionStorage.setItem("currentPlayer", name);
-    setPlayerName(name);
     sessionStorage.setItem("ready", "true");
+    setPlayerName(name);
     setIsReady(true);
-    socketRef.current.send(JSON.stringify({ type: "join", name: name }));
+
+    socketRef.current.send(JSON.stringify({ type: "join", name }));
   };
 
   return (
-    <div style={{ backgroundColor: "green", width: "100vw", height: "100vh" }}>
-      <Aces />
-      {!isReady && (
-        <UserNameField
-          onSubmit={(name) => {
-            handleSubmit(name);
-          }}
-        />
-      )}
-      {isReady && (
-        <div className="ready-message">
-          <h2>User {playerName} ready to play!</h2>
-          <p>Waiting for the host to start the game...</p>
-        </div>
-      )}
+    <div className="flex flex-col items-center justify-center bg-green-700 text-white h-screen px-4">
+      <div className="w-full max-w-md text-center">
+        <Aces />
+
+        {!isReady && (
+          <div className="mt-8">
+            <UserNameField onSubmit={handleSubmit} />
+          </div>
+        )}
+
+        {isReady && (
+          <div className="mt-8 bg-white text-black p-6 rounded-2xl shadow-lg">
+            <h2 className="text-xl font-semibold mb-2">
+              User <span className="text-green-700">{playerName}</span> is
+              ready!
+            </h2>
+            <p className="text-sm">Waiting for the host to start the game...</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
