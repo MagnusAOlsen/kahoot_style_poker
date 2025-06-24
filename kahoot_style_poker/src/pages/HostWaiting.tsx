@@ -64,7 +64,18 @@ function HostWaiting() {
           </ul>
         </div>
       </div>
-      <div className="start-page-buttons">
+      <div
+        style={{
+          position: "absolute",
+          top: "0",
+          right: "0",
+          display: "flex",
+          gap: "10px",
+          padding: "10px 15px",
+          zIndex: 10,
+          borderBottomLeftRadius: "12px",
+        }}
+      >
         <StartGameButton
           currentPlayers={currentPlayers}
           onStartGame={startGame}

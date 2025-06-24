@@ -4,6 +4,7 @@ import { Player } from "../gameLogic/Player.ts";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { Card } from "../gameLogic/Card.ts";
+import MusicButton from "../components/MusicButton.tsx";
 
 function HostPlaying() {
   const location = useLocation();
@@ -45,6 +46,7 @@ function HostPlaying() {
         playersPlaying={currentPlayers}
         communityCards={communityCards}
       />
+      <MusicButton />
     </div>
   );
 }

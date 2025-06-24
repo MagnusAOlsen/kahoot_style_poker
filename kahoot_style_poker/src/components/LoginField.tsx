@@ -1,6 +1,7 @@
 import React from "react";
 import "./LoginField.css";
 import Player from "../gameLogic/Player.ts";
+import AnimatedEllipsis from "./animatedEllipsis.tsx";
 
 type LoginFieldProps = {
   currentPlayers: Player[];
@@ -20,7 +21,12 @@ function LoginField({ currentPlayers }: LoginFieldProps) {
             <li key={index}>{player.name}</li>
           ))}
         </ul>
-        {currentPlayers.length < 8 && <p>Waiting for players to join...</p>}
+        {currentPlayers.length < 8 && (
+          <p>
+            Waiting for players to join
+            <AnimatedEllipsis />
+          </p>
+        )}
         {currentPlayers.length == 8 && <p>Lobby full! Let's start</p>}
       </div>
       <button className="startGame" />

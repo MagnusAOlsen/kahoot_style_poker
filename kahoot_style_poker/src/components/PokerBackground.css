@@ -1,6 +1,6 @@
 .poker-wrapper {
     height: 100vh;
-    width: 100%;
+    width: 105%;
     position: absolute; /* changed from relative */
     top: 0;
     left: 0;
@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     background-color: #3c7ac5;
+    overflow:"hidden";
   }
   
   .poker-background {
@@ -18,6 +19,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 0;
+    overflow: hidden;
   }
   
   

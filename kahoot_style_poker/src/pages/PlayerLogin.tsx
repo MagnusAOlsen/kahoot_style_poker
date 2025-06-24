@@ -1,9 +1,9 @@
-import Aces from "../components/Aces";
-import UserNameField from "../components/UsernameField";
+import Aces from "../components/Aces.tsx";
+import UserNameField from "../components/UsernameField.tsx";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Player } from "../gameLogic/Player.ts";
+import AnimatedEllipsis from "../components/animatedEllipsis.tsx";
 
 function PlayerLogin() {
   const navigate = useNavigate();
@@ -40,36 +40,53 @@ function PlayerLogin() {
 
   const handleSubmit = (name: string) => {
     if (!socketRef.current || !name) return;
-
     sessionStorage.setItem("currentPlayer", name);
-    sessionStorage.setItem("ready", "true");
     setPlayerName(name);
+    sessionStorage.setItem("ready", "true");
     setIsReady(true);
-
     socketRef.current.send(JSON.stringify({ type: "join", name }));
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-green-700 text-white h-screen px-4">
-      <div className="w-full max-w-md text-center">
+    <div
+      style={{
+        backgroundColor: "#0a1a2f",
+        width: "100vw",
+        height: "100dvh",
+        padding: "50px",
+        boxSizing: "border-box",
+        fontFamily: "Arial, sans-serif",
+        color: "white",
+        display: "flex",
+        flexDirection: "row",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ marginTop: "80%" }}>
         <Aces />
-
-        {!isReady && (
-          <div className="mt-8">
-            <UserNameField onSubmit={handleSubmit} />
-          </div>
-        )}
-
-        {isReady && (
-          <div className="mt-8 bg-white text-black p-6 rounded-2xl shadow-lg">
-            <h2 className="text-xl font-semibold mb-2">
-              User <span className="text-green-700">{playerName}</span> is
-              ready!
-            </h2>
-            <p className="text-sm">Waiting for the host to start the game...</p>
-          </div>
-        )}
       </div>
+
+      {!isReady ? (
+        <div style={{ width: "100%", maxWidth: "400px" }}>
+          <UserNameField onSubmit={handleSubmit} />
+        </div>
+      ) : (
+        <div style={{ textAlign: "center", maxWidth: "400px" }}>
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginBottom: "10px",
+            }}
+          >
+            User {playerName} ready to play!
+          </h2>
+          <p style={{ fontSize: "1.2rem" }}>
+            Waiting for the host to start the game
+            <AnimatedEllipsis />
+          </p>
+        </div>
+      )}
     </div>
   );
 }

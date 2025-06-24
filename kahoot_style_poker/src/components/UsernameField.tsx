@@ -7,28 +7,70 @@ type UserNameFieldProps = {
 
 function UserNameField({ onSubmit }: UserNameFieldProps) {
   const [newPlayer, setNewPlayer] = useState(() => {
-    const currentPlayer = localStorage.getItem("currentPlayer");
-    if (currentPlayer === null) return "";
-    return currentPlayer;
+    return localStorage.getItem("currentPlayer") || "";
   });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (newPlayer === "") return;
-    localStorage.setItem("currentPlayer", newPlayer);
-    onSubmit(newPlayer);
+    if (newPlayer.trim() === "") return;
+    localStorage.setItem("currentPlayer", newPlayer.trim());
+    onSubmit(newPlayer.trim());
   }
 
   return (
-    <form onSubmit={handleSubmit} className="username-form">
-      <div className="username-input">
-        <label htmlFor="username">Enter username</label>
+    <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "16px",
+        }}
+      >
+        <label
+          htmlFor="username"
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            color: "white",
+          }}
+        >
+          Enter your name to join
+        </label>
         <input
           id="username"
+          type="text"
           value={newPlayer}
           onChange={(e) => setNewPlayer(e.target.value)}
-        ></input>
-        <button className="btn">Add</button>
+          placeholder="Your name"
+          autoFocus
+          style={{
+            padding: "12px 16px",
+            fontSize: "1.1rem",
+            borderRadius: "10px",
+            border: "none",
+            width: "100%",
+            maxWidth: "400px",
+            boxSizing: "border-box",
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            padding: "16px",
+            fontSize: "1.2rem",
+            backgroundColor: "#ffffff",
+            color: "#0b5e0b",
+            borderRadius: "50px",
+            border: "none",
+            fontWeight: "bold",
+            width: "100%",
+            maxWidth: "400px",
+            cursor: "pointer",
+          }}
+        >
+          Join Game!
+        </button>
       </div>
     </form>
   );

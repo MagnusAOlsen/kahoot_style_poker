@@ -1,21 +1,19 @@
 import aces from "../assets/aces.png";
+import React from "react";
 
 function Aces() {
   return (
-    <img
-      src={aces}
-      alt="Player Waiting"
-      style={{
-        position: "fixed", // or "absolute" if inside a relatively positioned parent
-        top: 0,
-        left: 0,
-        width: "100vw",
-        marginTop: "15px",
-        marginLeft: "10px",
-        objectFit: "cover",
-        zIndex: 1,
-      }}
-    />
+    <div>
+      <img
+        src={aces}
+        alt="Player Waiting"
+        style={{
+          position: "absolute", // or "absolute" if inside a relatively positioned parent
+          maxWidth: "80%",
+          overflow: "hidden",
+        }}
+      />
+    </div>
   );
 }
 

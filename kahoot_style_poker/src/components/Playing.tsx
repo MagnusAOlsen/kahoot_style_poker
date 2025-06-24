@@ -76,7 +76,7 @@ function Playing({ playersPlaying, communityCards }: PlayingProps) {
         className="communityCards"
         style={{
           position: "absolute",
-          top: "50%",
+          top: "30%",
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 5,

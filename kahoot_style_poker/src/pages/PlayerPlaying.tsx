@@ -2,6 +2,7 @@ import { Player } from "../gameLogic/Player";
 import { useLocation } from "react-router-dom";
 import SliderInput from "../components/SliderInput";
 import React, { useState, useEffect, useRef } from "react";
+import { Card } from "../gameLogic/Card";
 
 function PlayerPlaying() {
   const socketRef = useRef<WebSocket | null>(null);
@@ -11,10 +12,8 @@ function PlayerPlaying() {
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
   const [isMyTurnMessage, setIsMyTurnMessage] = useState(false);
   const [isRaiseActive, setIsRaiseActive] = useState(false);
-
   const [showFoldedCards, setShowFoldedCards] = useState(false);
 
-  // Derived state
   const canAct =
     isMyTurnMessage &&
     myPlayer !== null &&
@@ -29,7 +28,6 @@ function PlayerPlaying() {
     playerNameRef.current = playerName;
 
     socket.onopen = () => {
-      console.log("PLAYERNAME:::::", playerName);
       if (playerName) {
         socket.send(JSON.stringify({ type: "reconnect", name: playerName }));
       }
@@ -39,11 +37,11 @@ function PlayerPlaying() {
       const data = JSON.parse(msg.data);
 
       if (data.type === "player") {
-        console.log("Received player data:", data.player);
         setMyPlayer(data.player);
         sessionStorage.setItem("myPlayer", JSON.stringify(data.player));
         if (data.isMyTurn) {
           setIsMyTurnMessage(true);
+          sessionStorage.setItem("isMyTurn", "true");
         }
       }
 
@@ -51,6 +49,7 @@ function PlayerPlaying() {
         setIsRaiseActive(false);
         setShowFoldedCards(false);
         setIsMyTurnMessage(true);
+        sessionStorage.setItem("isMyTurn", "true");
       }
     };
 
@@ -65,35 +64,83 @@ function PlayerPlaying() {
     sessionStorage.setItem("isMyTurn", "false");
   };
 
+  const getCardImage = (card: Card): string => {
+    return `../cards/${card.suit[0].toUpperCase()}${card.rank}.png`;
+  };
+
   return (
-    <>
-      <h1>
+    <div
+      style={{
+        backgroundColor: "#0a1a2f",
+        width: "100vw",
+        height: "100dvh",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        boxSizing: "border-box",
+        fontFamily: "Arial, sans-serif",
+        color: "white",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <h1
+        style={{ fontWeight: "bold", fontSize: "1.5rem", marginBottom: "20px" }}
+      >
         {myPlayer?.name}: {myPlayer?.chips} kr
       </h1>
 
-      <div className="CardContainer">
-        <div className="Card1">
-          <p>
-            {myPlayer?.hand?.[0]?.rank} of {myPlayer?.hand?.[0]?.suit}
-          </p>
-        </div>
-        <div className="Card2">
-          <p>
-            {myPlayer?.hand?.[1]?.rank} of {myPlayer?.hand?.[1]?.suit}
-          </p>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          marginBottom: "30px",
+          width: "100%",
+        }}
+      >
+        {myPlayer?.hand?.map((card, i) => (
+          <img
+            key={i}
+            src={getCardImage(card)}
+            style={{ width: "42vw", height: "auto", borderRadius: "12px" }}
+            alt={`Card ${i}`}
+          />
+        ))}
       </div>
 
       {canAct && (
-        <div>
-          <button onClick={() => sendMove("call")}>Call</button>
-          <button onClick={() => setIsRaiseActive(true)}>Raise</button>
-          <button onClick={() => sendMove("fold")}>Fold</button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: "90%",
+          }}
+        >
+          <button onClick={() => sendMove("call")} style={actionButtonStyle}>
+            Call
+          </button>
+          <button
+            onClick={() => setIsRaiseActive(true)}
+            style={actionButtonStyle}
+          >
+            Raise
+          </button>
+          <button onClick={() => sendMove("fold")} style={actionButtonStyle}>
+            Fold
+          </button>
         </div>
       )}
 
       {isRaiseActive && (
-        <div className="RaiseDiv">
+        <div
+          style={{
+            width: "100%",
+            padding: "0 20px",
+            boxSizing: "border-box",
+          }}
+        >
           <SliderInput
             min={0}
             max={myPlayer?.chips || 0}
@@ -102,11 +149,27 @@ function PlayerPlaying() {
               sendMove("raise", value);
               setIsRaiseActive(false);
             }}
+            onReject={() => {
+              setIsRaiseActive(false);
+              setIsMyTurnMessage(true);
+              sessionStorage.setItem("isMyTurn", "true");
+            }}
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
+
+const actionButtonStyle: React.CSSProperties = {
+  padding: "16px",
+  fontSize: "1.2rem",
+  backgroundColor: "#ffffff",
+  color: "#0b5e0b",
+  borderRadius: "50px",
+  border: "none",
+  fontWeight: "bold",
+  width: "100%",
+};
 
 export default PlayerPlaying;
