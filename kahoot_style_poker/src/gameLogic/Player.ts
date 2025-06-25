@@ -68,21 +68,6 @@ export class Player {
     }
   }
 
-    /* if (isNaN(amount) || amount < 0) {
-      console.log("Invalid input. Betting 0.");
-      return 0;
-    }
-
-    if (amount === 0 && currentBet !== 0) {
-        this.fold();
-        return 0;
-    }
-
-    const bet = Math.max(Math.min(amount, this.chips), leastBet);
-    this.chips -= bet;
-    console.log(this.name + " betted " + bet + " kr" )
-    return bet;
-  } */
 
   fold(): void {
     this.hand = [];

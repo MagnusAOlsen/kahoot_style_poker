@@ -1,10 +1,8 @@
 // generate-qr.ts
 import QRCode from 'qrcode';
-import ip from 'ip';
-import fs from 'fs';
 
 
-/* const localIP = ip.address(); // e.g. 192.168.1.42 */
+
 const localIP = '192.168.86.28';
 const port = 5173;
 const url = `http://${localIP}:${port}/PlayerLogin`;
