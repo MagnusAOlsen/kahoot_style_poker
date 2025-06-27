@@ -20,13 +20,13 @@ export class Game {
   private currentBet: number = 0;
   private isFirstRound: Boolean = true;
   public currentPlayer: Player | null = null;
-  public dealerPostion: number = 0;
+  public dealerPostion: number;
 
   constructor(players: Player[]) {
     this.players = players;
   }
 
-  startNewRound(): void {
+  startNewRound(dealerPosition: number): void {
     this.isFirstRound = true;
     this.pot = 0;
     this.phase = 'pre-flop';
@@ -34,6 +34,7 @@ export class Game {
     this.deck.reset();
     this.deck.shuffle();
     this.players.forEach(player => player.resetHand());
+    this.dealerPostion = dealerPosition;
 
     for (let i = 0; i < 2; i++) {
         for (const player of this.players) {

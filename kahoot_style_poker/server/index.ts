@@ -12,8 +12,8 @@ async function broadcast(wss, message) {
   });
 }
 
-async function playRound(game, wss, clients) {
-  game.startNewRound();
+async function playRound(game, wss, clients, dealerPosition) {
+  game.startNewRound(dealerPosition);
   for (const [socket, name] of clients.entries()) {
     const player = game.players.find(p => p.name === name);
     if (player && socket.readyState === WebSocket.OPEN) {
@@ -21,7 +21,7 @@ async function playRound(game, wss, clients) {
     }
   }
   
-  broadcast(wss, { type: "roundStarted" });
+  broadcast(wss, { type: "communityCards", cards: game.getCommunityCards() });
 
   for (const player of game.players) {
     player.notifyTurn = (playerName) => {
@@ -70,10 +70,24 @@ function main() {
 
         case 'startGame': {
           game = new Game(players);
-          broadcast(wss, { type: 'gameStarted' });
-          setTimeout(() => playRound(game, wss, clients), 500);
+          
+
+
+          const loopRounds = async () => {
+            let dealerPosition = 0;
+            while (true) {
+              broadcast(wss, { type: 'gameStarted' });
+              await playRound(game, wss, clients, dealerPosition);
+              await new Promise(resolve => setTimeout(resolve, 1000)); // small pause between rounds
+              dealerPosition +=1;
+            }
+          };
+          loopRounds();
           break;
         }
+
+          
+        
 
         /* case 'startGame': {
           console.log("Starting game loop with players:", players.map(p => p.name));
