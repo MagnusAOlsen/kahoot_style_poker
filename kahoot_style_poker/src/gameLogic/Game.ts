@@ -130,10 +130,12 @@ export class Game {
       // If everyone has acted after the last raise (or initial check), we can break
       
 
-      if (activePlayers.every(p => p.hasFolded || (bets.get(p) === lastBet && playersWhoActed.has(p)))) {
-        break;
+      if (this.phase !== "pre-flop" || !bigBlindPlayer || !(bets.get(bigBlindPlayer) === 2)) {
+        if (activePlayers.every(p => p.hasFolded || (bets.get(p) === lastBet && playersWhoActed.has(p)))) {
+          break;
+        }
+
       }
-      
 
       
   
