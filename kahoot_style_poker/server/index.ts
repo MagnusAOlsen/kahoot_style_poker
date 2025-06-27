@@ -59,21 +59,16 @@ function main() {
 
       switch (data.type) {
         case 'join': {
-          console.log("MAMMAMIA")
           if (!players.find(p => p.name === data.name) && players.length < 8) {
             const newPlayer = new Player(data.name);
             players.push(newPlayer);
-            console.log("Player joined:", data.name);
-            console.log(players)
           }
           clients.set(socket, data.name);
           broadcast(wss, { type: 'players', players });
-          console.log(clients)
           break;
         }
 
         case 'startGame': {
-          console.log("Starting game with players:", players.map(p => p.name));
           game = new Game(players);
           broadcast(wss, { type: 'gameStarted' });
           setTimeout(() => playRound(game, wss, clients), 500);
@@ -104,7 +99,6 @@ function main() {
         case 'reconnect': {
           const reconnectingName = data.name;
           const reconnectingPlayer = players.find(p => p.name === reconnectingName);
-          console.log("Reconnecting player:", reconnectingPlayer);
           if (reconnectingPlayer) {
             for (const [sock, name] of clients.entries()) {
               if (name === data.name && sock !== socket) {
@@ -112,7 +106,6 @@ function main() {
                 sock.close();
               }
             }
-            console.log("Player reconnected:", data.name);
             clients.set(socket, data.name);
             socket.send(JSON.stringify({ type: 'player', player: reconnectingPlayer, isMyTurn: game?.currentPlayer?.name === reconnectingName }));
           }
@@ -141,7 +134,7 @@ function main() {
 
         case 'fold': {
           if (player) {
-            player.respondToBet(0);
+            player.respondToBet(-2);
             socket.send(JSON.stringify({ type: 'player', player }));
             broadcast(wss, { type: 'players', players: players });
             

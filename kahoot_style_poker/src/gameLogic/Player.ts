@@ -23,6 +23,9 @@ export class Player {
   position: number;
   private resolveBet?: (amount: number) => void;
   public notifyTurn?: (playerName: string) => void;
+  public isDealer: boolean = false;
+  public isSmallBlind: boolean = false;
+  public isBigBlind: boolean = false;
 
   constructor(name: string, startingChips: number = 1000) {
     this.name = name;
@@ -42,18 +45,22 @@ export class Player {
   };
 
 
-  public async bet(leastBet: number, currentBet: number): Promise<number> {
+  public async bet(amountToCall: number, currentBet: number): Promise<number> {
     if (this.notifyTurn) {
       this.notifyTurn(this.name);
     }
 
     return new Promise((resolve) => {
       this.resolveBet = (amount: number) => {
-        if (amount === 0 && currentBet !== 0) {
+        if (amount === -2) {
           this.fold();
           resolve(0);}
+        else if (amount === -1) {
+          const bet = amountToCall;
+          this.chips -= bet;
+          resolve(bet);}
         else {
-          const bet = Math.max(Math.min(amount, this.chips), leastBet);
+          const bet = Math.min(amount, this.chips);
           this.chips -= bet;
           resolve(bet);
         }
