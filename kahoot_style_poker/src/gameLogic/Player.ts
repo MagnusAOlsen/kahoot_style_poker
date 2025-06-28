@@ -26,6 +26,7 @@ export class Player {
   public isDealer: boolean = false;
   public isSmallBlind: boolean = false;
   public isBigBlind: boolean = false;
+  public isAllIn: boolean = false;
 
   constructor(name: string, startingChips: number = 1000) {
     this.name = name;

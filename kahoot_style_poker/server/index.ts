@@ -14,6 +14,7 @@ async function broadcast(wss, message) {
 
 async function playRound(game, wss, clients, dealerPosition) {
   game.startNewRound(dealerPosition);
+  broadcast(wss, { type: 'players', players: game.players });
   for (const [socket, name] of clients.entries()) {
     const player = game.players.find(p => p.name === name);
     if (player && socket.readyState === WebSocket.OPEN) {
@@ -77,6 +78,7 @@ function main() {
             let dealerPosition = 0;
             while (true) {
               broadcast(wss, { type: 'gameStarted' });
+              broadcast(wss, { type: 'players', players: players });
               await playRound(game, wss, clients, dealerPosition);
               await new Promise(resolve => setTimeout(resolve, 1000)); // small pause between rounds
               dealerPosition +=1;
@@ -86,29 +88,6 @@ function main() {
           break;
         }
 
-          
-        
-
-        /* case 'startGame': {
-          console.log("Starting game loop with players:", players.map(p => p.name));
-          
-          if (!game) {
-            game = new Game(players); // Only create the Game instance once
-          }
-        
-          const loopRounds = async () => {
-            while (true) {
-              await broadcast(wss, { type: 'gameStarted' });
-        
-              await playRound(game, wss, clients);
-        
-              await new Promise(resolve => setTimeout(resolve, 1000)); // small pause between rounds
-            }
-          };
-        
-          loopRounds();
-          break;
-        } */
 
         case 'reconnect': {
           const reconnectingName = data.name;

@@ -64,8 +64,8 @@ export class Game {
       currentPlayerIndex = (this.dealerPostion + 3) % activePlayers.length; // Start after big blind
       lastBet = 2;
       lastRaiserIndex = (this.dealerPostion + 2) % activePlayers.length; // Big blind is last raiser
-      playersWhoActed.add(activePlayers[lastRaiserIndex-1]);
-      playersWhoActed.add(activePlayers[lastRaiserIndex]);
+      /* playersWhoActed.add(activePlayers[lastRaiserIndex-1]);
+      playersWhoActed.add(activePlayers[lastRaiserIndex]); */
       bets.set(smallBlindPlayer!, 1); // Small blind
       bets.set(bigBlindPlayer!, 2); // Big blind
       
@@ -108,6 +108,7 @@ export class Game {
         console.log(`Player ${player.name} calls the bet of ${amountToCall}, and has now betted ${totalBet}`);
         bets.set(player, totalBet);
         this.pot += amountToCall;
+        playersWhoActed.add(player);
       }
 
       else {
@@ -129,12 +130,24 @@ export class Game {
   
       // If everyone has acted after the last raise (or initial check), we can break
       
+    
 
-      if (this.phase !== "pre-flop" || !bigBlindPlayer || !(bets.get(bigBlindPlayer) === 2)) {
-        if (activePlayers.every(p => p.hasFolded || (bets.get(p) === lastBet && playersWhoActed.has(p)))) {
-          break;
-        }
 
+
+      const everyoneMatched = activePlayers.every(p =>
+        p.hasFolded || p.isAllIn || (bets.get(p) === lastBet && playersWhoActed.has(p))
+      );
+      
+      // ✅ Special pre-flop case: big blind should get option if no one raised
+      const bigBlindNeedsOption =
+        this.phase === "pre-flop" &&
+        bigBlindPlayer &&
+        lastBet === 2 &&
+        playersWhoActed.size === activePlayers.length - 1 &&
+        !playersWhoActed.has(bigBlindPlayer);
+      
+      if (everyoneMatched && !bigBlindNeedsOption) {
+        break;
       }
 
       
@@ -144,6 +157,10 @@ export class Game {
   
     this.currentPlayer = null;
     this.currentBet = 0;
+    if (bigBlindPlayer?.isBigBlind && smallBlindPlayer?.isSmallBlind) {
+      bigBlindPlayer!.isBigBlind = false;
+      smallBlindPlayer!.isSmallBlind = false;
+    }
   }
 
   private postBlinds(): void {
@@ -204,6 +221,7 @@ export class Game {
       `#${i + 1}: ${player.name} with ${hand.name} — ${hand.cards.map(c => c.toString()).join(', ')} with number of chips: ${player.chips}`
     );
   });
+  this.players.forEach(player => player.isDealer = false);
 }
 
 
