@@ -46,7 +46,7 @@ export class Player {
   };
 
 
-  public async bet(amountToCall: number, currentBet: number): Promise<number> {
+  public async bet(amountToCall: number, playerBetSoFar: number): Promise<number> {
     if (this.notifyTurn) {
       this.notifyTurn(this.name);
     }
@@ -57,12 +57,15 @@ export class Player {
           this.fold();
           resolve(0);}
         else if (amount === -1) {
-          const bet = amountToCall;
+          const bet = Math.min(this.chips, amountToCall);
           this.chips -= bet;
-          resolve(bet);}
+          if (this.chips === 0) this.isAllIn = true;
+          resolve(bet);
+        }
         else {
           const bet = Math.min(amount, this.chips);
           this.chips -= bet;
+          if (this.chips === 0) this.isAllIn = true;
           resolve(bet);
         }
       };
@@ -86,5 +89,9 @@ export class Player {
     this.hand = [];
     this.hasFolded = false;
     this.resolveBet = undefined; // Reset the bet resolver
+    this.isAllIn = false;
+    this.isSmallBlind = false;
+    this.isBigBlind = false;
+    this.isDealer = false;
   }
 }

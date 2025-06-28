@@ -77,13 +77,23 @@ function main() {
           const loopRounds = async () => {
             let dealerPosition = 0;
             while (true) {
+              const playersWithCash = players.filter(p => p.chips > 0);
+              if (playersWithCash.length < 2) break;
+          
               broadcast(wss, { type: 'gameStarted' });
-              broadcast(wss, { type: 'players', players: players });
+              broadcast(wss, { type: 'players', players });
+          
               await playRound(game, wss, clients, dealerPosition);
-              await new Promise(resolve => setTimeout(resolve, 1000)); // small pause between rounds
-              dealerPosition +=1;
+          
+              await new Promise(resolve => setTimeout(resolve, 3000));
+          
+              // ✅ Rotate dealer only to active players
+              do {
+                dealerPosition = (dealerPosition + 1) % players.length;
+              } while (players[dealerPosition].chips === 0);
             }
           };
+          
           loopRounds();
           break;
         }
