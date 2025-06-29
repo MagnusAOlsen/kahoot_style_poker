@@ -335,7 +335,6 @@ public checkIfAllPlayersRevealed(): void {
 
 
   getCommunityCards(): Card[] {
-    console.log(this.communityCards)
     this.currentBet = 0;
     return this.communityCards;
     }

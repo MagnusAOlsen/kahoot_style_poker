@@ -77,22 +77,33 @@ function main() {
         }
 
         case 'startGame': {
-          game = new Game(players);
           
-
-
           const loopRounds = async () => {
             let dealerPosition = 0;
             while (true) {
               const playersWithCash = players.filter(p => p.chips > 0);
               if (playersWithCash.length < 2) break;
           
+              console.log("starting new round with players:", players);
               broadcast(wss, { type: 'gameStarted' });
               broadcast(wss, { type: 'players', players });
-          
+              
+              game = new Game(players);
               await playRound(game, wss, clients, dealerPosition);
           
               await new Promise(resolve => setTimeout(resolve, 3000));
+
+              for (const player of players) {
+                if (player.leave) {
+                  players.splice(players.indexOf(player), 1);
+                  clients.delete([...clients.entries()].find(([_, name]) => name === player.name)?.[0]);
+                }
+                else if (player.addOn) {
+                  console.log(`Player ${player.name} is adding on chips.`);
+                  player.chips = 150;
+                  player.addOn = false;
+                }
+              }
           
               // ✅ Rotate dealer only to active players
               do {
@@ -183,6 +194,20 @@ function main() {
             broadcast(wss, { type: 'players', players });
             broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
             game.checkIfAllPlayersRevealed(); // ✅ trigger check
+          }
+          break;
+        }
+
+        case 'addOn': {
+          if (player) {
+            player.addOn = true;
+          }
+          break;
+        }
+        
+        case 'leave': {
+          if (player) {
+            player.leave = true;
           }
           break;
         }

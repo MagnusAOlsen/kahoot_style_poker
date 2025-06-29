@@ -20,6 +20,9 @@ function PlayerPlaying() {
     !myPlayer.hasFolded &&
     !isRaiseActive;
 
+  const buyInorLeave =
+    !isMyTurnMessage && myPlayer !== null && !isRaiseActive && !showFoldedCards;
+
   useEffect(() => {
     const socket = new WebSocket("ws://192.168.86.28:3000");
     socketRef.current = socket;
@@ -141,6 +144,27 @@ function PlayerPlaying() {
           </button>
         </div>
       )}
+
+      {buyInorLeave && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: "90%",
+          }}
+        >
+          {myPlayer.chips < 150 && (
+            <button onClick={() => sendMove("addOn")} style={actionButtonStyle}>
+              {myPlayer?.chips === 0 ? "Rebuy to 150 kr" : "Add-on to 150 kr"}
+            </button>
+          )}
+          <button onClick={() => sendMove("leave")} style={actionButtonStyle}>
+            Leave
+          </button>
+        </div>
+      )}
+
       {showFoldedCards && (
         <div
           style={{

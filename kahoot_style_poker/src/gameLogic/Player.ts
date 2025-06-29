@@ -30,8 +30,10 @@ export class Player {
   public showLeftCard: boolean = false;
   public showRightCard: boolean = false;
   public showBothCards: boolean = false;
+  public addOn: boolean = false;
+  public leave: boolean = false;
 
-  constructor(name: string, startingChips: number = 1000) {
+  constructor(name: string, startingChips: number = 150) {
     this.name = name;
     this.chips = startingChips;
   }
