@@ -84,7 +84,6 @@ function main() {
               const playersWithCash = players.filter(p => p.chips > 0);
               if (playersWithCash.length < 2) break;
           
-              console.log("starting new round with players:", players);
               broadcast(wss, { type: 'gameStarted' });
               broadcast(wss, { type: 'players', players });
               
@@ -99,7 +98,6 @@ function main() {
                   clients.delete([...clients.entries()].find(([_, name]) => name === player.name)?.[0]);
                 }
                 else if (player.addOn) {
-                  console.log(`Player ${player.name} is adding on chips.`);
                   player.chips = 150;
                   player.addOn = false;
                 }
