@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { Card } from "../gameLogic/Card.ts";
 import MusicButton from "../components/MusicButton.tsx";
+import StartGameButton from "../components/StartGameButton.tsx";
 
 function HostPlaying() {
   const location = useLocation();
@@ -34,6 +35,11 @@ function HostPlaying() {
       } else if (data.type === "players") {
         setCurrentPlayers(data.players);
         sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
+        setCommunityCards(
+          sessionStorage.getItem("communityCards")
+            ? JSON.parse(sessionStorage.getItem("communityCards") || "[]")
+            : []
+        );
       }
     };
 
@@ -46,7 +52,20 @@ function HostPlaying() {
         playersPlaying={currentPlayers}
         communityCards={communityCards}
       />
-      <MusicButton />
+      <div
+        style={{
+          position: "absolute",
+          top: "0",
+          right: "0",
+          display: "flex",
+          gap: "10px",
+          padding: "10px 15px",
+          zIndex: 10,
+          borderBottomLeftRadius: "12px",
+        }}
+      >
+        <MusicButton />
+      </div>
     </div>
   );
 }

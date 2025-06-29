@@ -51,6 +51,10 @@ function PlayerPlaying() {
         setIsMyTurnMessage(true);
         sessionStorage.setItem("isMyTurn", "true");
       }
+
+      if (data.type === "showFoldedCards") {
+        setShowFoldedCards(true);
+      }
     };
 
     return () => socket.close();
@@ -62,6 +66,13 @@ function PlayerPlaying() {
     }
     setIsMyTurnMessage(false);
     sessionStorage.setItem("isMyTurn", "false");
+  };
+
+  const sendShownCards = (action: string) => {
+    if (socketRef.current && myPlayer) {
+      socketRef.current.send(JSON.stringify({ type: action }));
+    }
+    setShowFoldedCards(false);
   };
 
   const getCardImage = (card: Card): string => {
@@ -89,7 +100,6 @@ function PlayerPlaying() {
       >
         {myPlayer?.name}: {myPlayer?.chips} kr
       </h1>
-
       <div
         style={{
           display: "flex",
@@ -108,7 +118,6 @@ function PlayerPlaying() {
           />
         ))}
       </div>
-
       {canAct && (
         <div
           style={{
@@ -129,6 +138,41 @@ function PlayerPlaying() {
           </button>
           <button onClick={() => sendMove("fold")} style={actionButtonStyle}>
             Fold
+          </button>
+        </div>
+      )}
+      {showFoldedCards && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: "90%",
+          }}
+        >
+          <button
+            onClick={() => sendShownCards("showLeftCard")}
+            style={actionButtonStyle}
+          >
+            Show left card
+          </button>
+          <button
+            onClick={() => sendShownCards("showRightCard")}
+            style={actionButtonStyle}
+          >
+            Show right card
+          </button>
+          <button
+            onClick={() => sendShownCards("showBothCards")}
+            style={actionButtonStyle}
+          >
+            Show both cards
+          </button>
+          <button
+            onClick={() => sendShownCards("showNone")}
+            style={actionButtonStyle}
+          >
+            Show none
           </button>
         </div>
       )}

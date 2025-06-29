@@ -40,7 +40,14 @@ async function playRound(game, wss, clients, dealerPosition) {
   }
 
   const rankings = game.rankPlayers();
-  game.payOut(rankings);
+  await game.payOut(rankings, async (playerName) => {
+    const socket = [...clients.entries()].find(([_, name]) => name === playerName)?.[0];
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'showFoldedCards' }));
+    }
+  }
+  );
+  await game.waitForAllPlayersToReveal();
   broadcast(wss, { type: "roundOver", rankings });
 }
 
@@ -144,6 +151,42 @@ function main() {
           }
           break;
         }
+
+        case 'showLeftCard': {
+          if (player && game) {
+            player.showLeftCard = true;
+            player.showRightCard = false;
+            player.showBothCards = false;
+            broadcast(wss, { type: 'players', players });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
+            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+          }
+          break;
+        }
+        
+        case 'showRightCard': {
+          if (player && game) {
+            player.showLeftCard = false;
+            player.showRightCard = true;
+            player.showBothCards = false;
+            broadcast(wss, { type: 'players', players });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
+            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+          }
+          break;
+        }
+        case 'showBothCards': {
+          if (player && game) {
+            player.showLeftCard = false;
+            player.showRightCard = false;
+            player.showBothCards = true;
+            broadcast(wss, { type: 'players', players });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
+            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+          }
+          break;
+        }
+        
 
         default:
           console.log("Unknown message type:", data.type);

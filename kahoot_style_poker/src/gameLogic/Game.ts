@@ -111,7 +111,7 @@ export class Game {
       const playerBetSoFar = bets.get(player)!;
       const amountToCall = Math.max(lastBet - playerBetSoFar, 0);
   
-      const bet = await player.bet(amountToCall, playerBetSoFar);
+      const bet = await player.bet(amountToCall);
       
   
       if (bet === -2) {
@@ -286,7 +286,13 @@ export class Game {
   this.players.forEach(player => player.isDealer = false);
 } */
 
-  payOut(ranking: Ranking[]): void {
+  async payOut(ranking: Ranking[], showFoldedCards: (playerName: string) => Promise<void>): Promise<void> {
+
+    const activePlayers = this.players.filter(p => !p.hasFolded && p.hand.length > 0);
+    for (const player of activePlayers) {
+      await showFoldedCards(player.name);
+    }
+
     console.log("Payout");
     console.log("pots: ", this.pots);
     for (const pot of this.pots) {
@@ -305,6 +311,27 @@ export class Game {
     });
     this.players.forEach(player => player.isDealer = false);
   }
+
+  private revealResolve: (() => void) | null = null;
+
+public waitForAllPlayersToReveal(): Promise<void> {
+  return new Promise(resolve => {
+    this.revealResolve = resolve;
+  });
+}
+
+public checkIfAllPlayersRevealed(): void {
+  const playersToReveal = this.players.filter(p => !p.hasFolded);
+  const allDone = playersToReveal.every(p =>
+    p.showLeftCard || p.showRightCard || p.showBothCards
+  );
+
+  if (allDone && this.revealResolve) {
+    this.revealResolve(); // ✅ Continue playRound
+    this.revealResolve = null; // Clear it
+  }
+}
+
 
 
   getCommunityCards(): Card[] {

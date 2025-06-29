@@ -27,6 +27,9 @@ export class Player {
   public isSmallBlind: boolean = false;
   public isBigBlind: boolean = false;
   public isAllIn: boolean = false;
+  public showLeftCard: boolean = false;
+  public showRightCard: boolean = false;
+  public showBothCards: boolean = false;
 
   constructor(name: string, startingChips: number = 1000) {
     this.name = name;
@@ -46,7 +49,7 @@ export class Player {
   };
 
 
-  public async bet(amountToCall: number, playerBetSoFar: number): Promise<number> {
+  public async bet(amountToCall: number): Promise<number> {
     if (this.notifyTurn) {
       this.notifyTurn(this.name);
     }
@@ -93,5 +96,8 @@ export class Player {
     this.isSmallBlind = false;
     this.isBigBlind = false;
     this.isDealer = false;
+    this.showLeftCard = false;
+    this.showRightCard = false;
+    this.showBothCards = false;
   }
 }

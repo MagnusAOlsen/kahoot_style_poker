@@ -28,6 +28,7 @@ function MusicButton() {
           borderRadius: "40%",
           backgroundColor: "rgba(211, 196, 196, 0.95)",
           border: "3px solid black",
+          position: "relative",
         }}
       >
         <img src={musicImage} alt="Music Icon" style={{ width: "100%" }} />
@@ -36,11 +37,11 @@ function MusicButton() {
             src={redCross}
             alt="red cross"
             style={{
-              width: "35%",
+              width: "100px",
               zIndex: "2",
               position: "absolute",
-              top: "50px",
-              right: "45px",
+              top: "10px",
+              right: "2px",
             }}
           />
         )}
