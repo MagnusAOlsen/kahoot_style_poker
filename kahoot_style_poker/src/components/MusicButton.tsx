@@ -1,21 +1,10 @@
 import React from "react";
 import musicImage from "../assets/music_image.png";
 import redCross from "../assets/red_cross.png";
+import { useMusic } from "../context/MusicContext";
 
 function MusicButton() {
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
-
-  const toggleMusic = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+  const { isPlaying, toggleMusic } = useMusic();
 
   return (
     <div
@@ -32,7 +21,7 @@ function MusicButton() {
         }}
       >
         <img src={musicImage} alt="Music Icon" style={{ width: "100%" }} />
-        {isPlaying && (
+        {!isPlaying && (
           <img
             src={redCross}
             alt="red cross"
@@ -46,7 +35,6 @@ function MusicButton() {
           />
         )}
       </button>
-      <audio ref={audioRef} loop />
     </div>
   );
 }
