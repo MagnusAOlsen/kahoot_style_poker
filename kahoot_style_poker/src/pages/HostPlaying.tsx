@@ -21,6 +21,7 @@ function HostPlaying() {
   const [potSize, setPotSize] = useState<number>(() => {
     return JSON.parse(sessionStorage.getItem("potSize") || "0") as number;
   });
+  const [shuffling, setShuffling] = useState<boolean>(false);
 
   useEffect(() => {
     localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
@@ -38,7 +39,10 @@ function HostPlaying() {
         sessionStorage.setItem("communityCards", JSON.stringify(data.cards));
         setPotSize(data.potSize || 0);
         sessionStorage.setItem("potSize", JSON.stringify(data.potSize || 0));
+      } else if (data.type === "shuffling") {
+        setShuffling(true);
       } else if (data.type === "players") {
+        setShuffling(false);
         setCurrentPlayers(data.players);
         sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
         setCommunityCards(
@@ -58,6 +62,7 @@ function HostPlaying() {
         playersPlaying={currentPlayers}
         communityCards={communityCards}
         potSize={potSize}
+        shuffling={shuffling}
       />
       <div
         style={{

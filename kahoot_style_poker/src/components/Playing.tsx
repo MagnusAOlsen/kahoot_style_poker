@@ -6,14 +6,21 @@ import React from "react";
 import HA from "../assets/cards/HA.png";
 import { Card } from "../gameLogic/Card.ts";
 import thePot from "../assets/poker_chips.png";
+import ShuffleAnimation from "./ShuffleAnimation.tsx";
 
 type PlayingProps = {
   playersPlaying: Player[];
   communityCards?: Card[];
   potSize: number;
+  shuffling: boolean;
 };
 
-function Playing({ playersPlaying, communityCards, potSize }: PlayingProps) {
+function Playing({
+  playersPlaying,
+  communityCards,
+  potSize,
+  shuffling,
+}: PlayingProps) {
   const centerX = 800;
   const centerY = 440;
 
@@ -75,19 +82,22 @@ function Playing({ playersPlaying, communityCards, potSize }: PlayingProps) {
       }}
     >
       <PokerBackground />
+      {shuffling && <ShuffleAnimation />}
+      {!shuffling && (
+        <img
+          src={deck_of_cards}
+          alt="Deck"
+          style={{
+            position: "absolute",
+            width: "70px",
+            top: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 5,
+          }}
+        />
+      )}
 
-      <img
-        src={deck_of_cards}
-        alt="Deck"
-        style={{
-          position: "absolute",
-          width: "70px",
-          top: "20px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 5,
-        }}
-      />
       <div
         className="communityCards"
         style={{
@@ -126,7 +136,6 @@ function Playing({ playersPlaying, communityCards, potSize }: PlayingProps) {
           </div>
         )}
       </div>
-
       {players}
     </div>
   );

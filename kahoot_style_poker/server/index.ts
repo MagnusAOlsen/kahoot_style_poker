@@ -13,6 +13,8 @@ async function broadcast(wss, message) {
 }
 
 async function playRound(game, wss, clients, dealerPosition) {
+  broadcast(wss, { type: 'shuffling'});
+  await new Promise(resolve => setTimeout(resolve, 2000));
   game.startNewRound(dealerPosition);
   broadcast(wss, { type: 'players', players: game.players });
   for (const [socket, name] of clients.entries()) {

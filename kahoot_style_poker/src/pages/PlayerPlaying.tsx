@@ -98,11 +98,34 @@ function PlayerPlaying() {
         alignItems: "center",
       }}
     >
-      <h1
-        style={{ fontWeight: "bold", fontSize: "1.5rem", marginBottom: "20px" }}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "row",
+        }}
       >
-        {myPlayer?.name}: {myPlayer?.chips} kr
-      </h1>
+        <img
+          src={`../avatars/${myPlayer?.avatar}.png`}
+          alt="Avatar"
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            marginRight: "10px",
+            marginTop: "7px",
+          }}
+        />
+        <h1
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+            marginBottom: "20px",
+          }}
+        >
+          {myPlayer?.name}: {myPlayer?.chips} kr
+        </h1>
+      </div>
       <div
         style={{
           display: "flex",
