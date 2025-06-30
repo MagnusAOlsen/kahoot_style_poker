@@ -5,19 +5,21 @@ import { Player } from "../gameLogic/Player.ts";
 import React from "react";
 import HA from "../assets/cards/HA.png";
 import { Card } from "../gameLogic/Card.ts";
+import thePot from "../assets/poker_chips.png";
 
 type PlayingProps = {
   playersPlaying: Player[];
   communityCards?: Card[];
+  potSize: number;
 };
 
-function Playing({ playersPlaying, communityCards }: PlayingProps) {
+function Playing({ playersPlaying, communityCards, potSize }: PlayingProps) {
   const centerX = 800;
   const centerY = 440;
 
   const curveRadiusX = 150;
-  const curveRadiusY = 160;
-  const bottomPlayerSpacing = 250;
+  const curveRadiusY = 170;
+  const bottomPlayerSpacing = 320;
 
   const totalSeats = 8;
   const seatPositions: { x: number; y: number }[] = [];
@@ -26,23 +28,31 @@ function Playing({ playersPlaying, communityCards }: PlayingProps) {
   // Right curve first (seats 0–1)
   for (let i = 0; i < 2; i++) {
     const angle = 1.5 * Math.PI + (i / 1) * (Math.PI / 2); // 270° to 360°
-    const x = centerX + 350 + curveRadiusX * Math.cos(angle);
-    const y = centerY + curveRadiusY * Math.sin(angle);
+    let x = centerX + 575 + curveRadiusX * Math.cos(angle);
+    let y = centerY + curveRadiusY * Math.sin(angle);
+    if (i === 0) {
+      x -= 100;
+      y -= 20;
+    }
     seatPositions.push({ x, y });
   }
 
   // Bottom line (seats 2–5)
   for (let i = 0; i < 4; i++) {
-    const x = centerX + 1.5 * bottomPlayerSpacing - i * bottomPlayerSpacing;
-    const y = centerY + curveRadiusY;
+    const x = centerX + 1.85 * bottomPlayerSpacing - i * bottomPlayerSpacing;
+    const y = centerY + 120 + curveRadiusY;
     seatPositions.push({ x, y });
   }
 
   // Left curve last (seats 6–7)
   for (let i = 0; i < 2; i++) {
     const angle = Math.PI + (i / 1) * (Math.PI / 2); // 180° to 270°
-    const x = centerX - 350 + curveRadiusX * Math.cos(angle);
-    const y = centerY + curveRadiusY * Math.sin(angle);
+    let x = centerX - 350 + curveRadiusX * Math.cos(angle);
+    let y = centerY + curveRadiusY * Math.sin(angle);
+    if (i !== 0) {
+      x += 100;
+      y -= 20;
+    }
     seatPositions.push({ x, y });
   }
 
@@ -57,7 +67,13 @@ function Playing({ playersPlaying, communityCards }: PlayingProps) {
   };
 
   return (
-    <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
+    <div
+      style={{
+        position: "relative",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <PokerBackground />
 
       <img
@@ -75,11 +91,15 @@ function Playing({ playersPlaying, communityCards }: PlayingProps) {
       <div
         className="communityCards"
         style={{
+          display: "flex",
+          flexDirection: "row",
           position: "absolute",
           top: "30%",
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 5,
+          marginTop: "100px",
+          marginLeft: "20px",
         }}
       >
         {communityCards?.map((card, i) => (
@@ -89,6 +109,22 @@ function Playing({ playersPlaying, communityCards }: PlayingProps) {
             style={{ width: "80px", marginRight: "10px" }}
           />
         ))}
+        {potSize > 0 && (
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "10px",
+              marginLeft: "20px",
+            }}
+          >
+            <img src={thePot} style={{ width: "50px" }} alt="Pot" />
+            <div
+              style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}
+            >
+              {potSize} kr
+            </div>
+          </div>
+        )}
       </div>
 
       {players}

@@ -1,0 +1,15 @@
+.betBox {
+    animation: popIn 0.3s ease-out;
+  }
+  
+  @keyframes popIn {
+    from {
+      transform: scale(0.8) translateX(-50%);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) translateX(-50%);
+      opacity: 1;
+    }
+  }
+  

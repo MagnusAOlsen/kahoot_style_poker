@@ -22,7 +22,7 @@ async function playRound(game, wss, clients, dealerPosition) {
     }
   }
   
-  broadcast(wss, { type: "communityCards", cards: game.getCommunityCards() });
+  broadcast(wss, { type: "communityCards", cards: game.getCommunityCards(), potSize: game.getPot() });
 
   for (const player of game.players) {
     player.notifyTurn = (playerName) => {
@@ -35,8 +35,9 @@ async function playRound(game, wss, clients, dealerPosition) {
 
   for (let i = 0; i < 4; i++) {
     await game.collectBets();
+    broadcast(wss, { type: "players", players: game.players });
     game.nextPhase();
-    broadcast(wss, { type: "communityCards", cards: game.getCommunityCards() });
+    broadcast(wss, { type: "communityCards", cards: game.getCommunityCards(), potSize: game.getPot() });
   }
 
   const rankings = game.rankPlayers();
@@ -167,7 +168,7 @@ function main() {
             player.showRightCard = false;
             player.showBothCards = false;
             broadcast(wss, { type: 'players', players });
-            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() , potSize: game.getPot()});
             game.checkIfAllPlayersRevealed(); // ✅ trigger check
           }
           break;
@@ -179,7 +180,7 @@ function main() {
             player.showRightCard = true;
             player.showBothCards = false;
             broadcast(wss, { type: 'players', players });
-            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
             game.checkIfAllPlayersRevealed(); // ✅ trigger check
           }
           break;
@@ -190,7 +191,7 @@ function main() {
             player.showRightCard = false;
             player.showBothCards = true;
             broadcast(wss, { type: 'players', players });
-            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
             game.checkIfAllPlayersRevealed(); // ✅ trigger check
           }
           break;
@@ -207,6 +208,14 @@ function main() {
           if (player) {
             player.leave = true;
           }
+          break;
+        }
+
+        case 'chooseAvatar': {
+          if (player) {
+            player.avatar = data.avatar;
+            broadcast(wss, { type: 'players', players });
+}
           break;
         }
         

@@ -32,6 +32,8 @@ export class Player {
   public showBothCards: boolean = false;
   public addOn: boolean = false;
   public leave: boolean = false;
+  public avatar?: string;
+  public currentBet: number = 0;
 
   constructor(name: string, startingChips: number = 150) {
     this.name = name;
@@ -51,7 +53,7 @@ export class Player {
   };
 
 
-  public async bet(amountToCall: number): Promise<number> {
+  public async bet(amountToCall: number, playerBetSoFar: number): Promise<number> {
     if (this.notifyTurn) {
       this.notifyTurn(this.name);
     }
@@ -63,12 +65,14 @@ export class Player {
           resolve(0);}
         else if (amount === -1) {
           const bet = Math.min(this.chips, amountToCall);
+          this.currentBet = bet + playerBetSoFar;
           this.chips -= bet;
           if (this.chips === 0) this.isAllIn = true;
           resolve(bet);
         }
         else {
           const bet = Math.min(amount, this.chips);
+          this.currentBet = bet + playerBetSoFar;
           this.chips -= bet;
           if (this.chips === 0) this.isAllIn = true;
           resolve(bet);

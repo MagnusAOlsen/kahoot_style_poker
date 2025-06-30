@@ -111,7 +111,7 @@ export class Game {
       const playerBetSoFar = bets.get(player)!;
       const amountToCall = Math.max(lastBet - playerBetSoFar, 0);
   
-      const bet = await player.bet(amountToCall);
+      const bet = await player.bet(amountToCall, playerBetSoFar);
       
   
       if (bet === -2) {
@@ -173,6 +173,11 @@ export class Game {
   
     this.currentPlayer = null;
     this.currentBet = 0;
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    for (const player of this.players) {
+      player.currentBet = 0;
+    };
+
     
 
     this.calculateSidePots(bets);

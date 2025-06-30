@@ -6,6 +6,7 @@ import React from "react";
 import { Card } from "../gameLogic/Card.ts";
 import MusicButton from "../components/MusicButton.tsx";
 import StartGameButton from "../components/StartGameButton.tsx";
+import { Game } from "../gameLogic/Game.ts";
 
 function HostPlaying() {
   const location = useLocation();
@@ -17,6 +18,9 @@ function HostPlaying() {
     );
   });
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
+  const [potSize, setPotSize] = useState<number>(() => {
+    return JSON.parse(sessionStorage.getItem("potSize") || "0") as number;
+  });
 
   useEffect(() => {
     localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
@@ -32,6 +36,8 @@ function HostPlaying() {
       } else if (data.type === "communityCards") {
         setCommunityCards(data.cards);
         sessionStorage.setItem("communityCards", JSON.stringify(data.cards));
+        setPotSize(data.potSize || 0);
+        sessionStorage.setItem("potSize", JSON.stringify(data.potSize || 0));
       } else if (data.type === "players") {
         setCurrentPlayers(data.players);
         sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
@@ -51,6 +57,7 @@ function HostPlaying() {
       <Playing
         playersPlaying={currentPlayers}
         communityCards={communityCards}
+        potSize={potSize}
       />
       <div
         style={{
