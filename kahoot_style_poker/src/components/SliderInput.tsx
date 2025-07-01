@@ -11,13 +11,15 @@ type SliderInputProps = {
 };
 
 function SliderInput({
-  min = 0,
-  max = 100,
-  initialValue = 50,
+  min,
+  max,
+  initialValue,
   onConfirm,
   onReject,
 }: SliderInputProps) {
-  const [value, setValue] = useState<number>();
+  const [value, setValue] = useState<number>(
+    initialValue !== undefined ? initialValue : 0
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(Number(event.target.value));
