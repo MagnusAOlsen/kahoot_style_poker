@@ -116,7 +116,7 @@ function Playing({
           <img
             key={i}
             src={getCardImage(card)}
-            style={{ width: "80px", marginRight: "10px" }}
+            style={{ width: "120px", marginRight: "10px" }}
           />
         ))}
         {potSize > 0 && (
@@ -127,9 +127,9 @@ function Playing({
               marginLeft: "20px",
             }}
           >
-            <img src={thePot} style={{ width: "50px" }} alt="Pot" />
+            <img src={thePot} style={{ width: "75px" }} alt="Pot" />
             <div
-              style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}
+              style={{ color: "white", fontWeight: "bold", fontSize: "45px" }}
             >
               {potSize} kr
             </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import React from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 type UserNameFieldProps = {
   onSubmit: (name: string) => void;
@@ -9,6 +10,8 @@ function UserNameField({ onSubmit }: UserNameFieldProps) {
   const [newPlayer, setNewPlayer] = useState(() => {
     return localStorage.getItem("currentPlayer") || "";
   });
+
+  const { language, toggleLanguage } = useLanguage();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +38,9 @@ function UserNameField({ onSubmit }: UserNameFieldProps) {
             color: "white",
           }}
         >
-          Enter your name to join
+          {language === "en"
+            ? "Enter your name to join"
+            : "Skriv inn brukernavn for å bli med"}
         </label>
         <input
           id="username"
@@ -69,7 +74,7 @@ function UserNameField({ onSubmit }: UserNameFieldProps) {
             cursor: "pointer",
           }}
         >
-          Join Game!
+          {language === "en" ? "Join Game!" : "Bli med i spillet!"}
         </button>
       </div>
     </form>

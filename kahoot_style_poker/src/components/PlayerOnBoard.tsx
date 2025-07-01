@@ -23,11 +23,6 @@ const getAvatar = (player: Player): string => {
 function PlayerOnBoard({ x, y, player }: PlayerProps) {
   return (
     <>
-      {/* <div className="betBox>">
-        {player.currentBet > 0 && (
-          <img src={poker_chips} style={{ width: "30px" }} />
-        )}
-      </div> */}
       <div
         className="player"
         style={{
@@ -74,7 +69,7 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
                 <img
                   src={getCardImage(player.hand[0])}
                   style={{
-                    width: "60px",
+                    width: "120px",
                     marginRight: "3px",
                   }}
                 />
@@ -89,7 +84,7 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
                 />
                 <img
                   src={getCardImage(player.hand[1])}
-                  style={{ width: "60px" }}
+                  style={{ width: "120px" }}
                 />
               </>
             )}
@@ -97,11 +92,11 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
               <>
                 <img
                   src={getCardImage(player.hand[0])}
-                  style={{ width: "60px", marginRight: "3px" }}
+                  style={{ width: "120px", marginRight: "3px" }}
                 />
                 <img
                   src={getCardImage(player.hand[1])}
-                  style={{ width: "60px" }}
+                  style={{ width: "120px" }}
                 />
               </>
             )}
@@ -111,14 +106,13 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
                 <>
                   <img
                     src={card_backside}
-                    style={{ width: "35px", marginRight: "3px" }}
+                    style={{ width: "50px", marginRight: "3px" }}
                   />
-                  <img src={card_backside} style={{ width: "35px" }} />
+                  <img src={card_backside} style={{ width: "50px" }} />
                 </>
               )}
           </div>
         </div>
-        {/* {<h2 style={{ color: "black" }}>{player.name}</h2>} */}
         <div
           className="playerDetails"
           style={{

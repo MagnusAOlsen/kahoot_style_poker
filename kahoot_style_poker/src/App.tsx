@@ -5,19 +5,22 @@ import PlayerPlaying from "./pages/PlayerPlaying";
 import PlayerLogin from "./pages/PlayerLogin";
 import React from "react";
 import { MusicProvider } from "./context/MusicContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
   return (
-    <MusicProvider>
-      <Router>
-        <Routes>
-          <Route path="/HostPlaying" element={<HostPlaying />} />
-          <Route path="/HostWaiting" element={<HostWaiting />} />
-          <Route path="/PlayerPlaying" element={<PlayerPlaying />} />
-          <Route path="/PlayerLogin" element={<PlayerLogin />} />
-        </Routes>
-      </Router>
-    </MusicProvider>
+    <LanguageProvider>
+      <MusicProvider>
+        <Router>
+          <Routes>
+            <Route path="/HostPlaying" element={<HostPlaying />} />
+            <Route path="/HostWaiting" element={<HostWaiting />} />
+            <Route path="/PlayerPlaying" element={<PlayerPlaying />} />
+            <Route path="/PlayerLogin" element={<PlayerLogin />} />
+          </Routes>
+        </Router>
+      </MusicProvider>
+    </LanguageProvider>
   );
 }
 

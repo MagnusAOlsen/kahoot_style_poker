@@ -5,6 +5,8 @@ import React from "react";
 import StartGameButton from "../components/StartGameButton";
 import MusicButton from "../components/MusicButton";
 import { Player } from "../gameLogic/Player.ts";
+import LanguageButton from "../components/LanguageButton";
+import { useLanguage } from "../context/LanguageContext";
 
 function HostWaiting() {
   console.log("HostWaiting component rendered");
@@ -17,6 +19,8 @@ function HostWaiting() {
       return [];
     }
   });
+
+  const { language } = useLanguage();
 
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -56,7 +60,8 @@ function HostWaiting() {
         <PokerBackground />
         <LoginField currentPlayers={currentPlayers} />
         <div className="player-list">
-          <h3>Current Players:</h3>
+          {language === "en" ? <h2>Current Players</h2> : <h2>Spillere</h2>}
+
           <ul>
             {currentPlayers.map((player, i) => (
               <li key={i}>{player.name}</li>
@@ -76,6 +81,7 @@ function HostWaiting() {
           borderBottomLeftRadius: "12px",
         }}
       >
+        <LanguageButton />
         <StartGameButton
           currentPlayers={currentPlayers}
           onStartGame={startGame}

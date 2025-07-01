@@ -1,5 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import "./SliderInput.css";
+import { useLanguage } from "../context/LanguageContext";
+
 type SliderInputProps = {
   min?: number;
   max?: number;
@@ -29,6 +31,8 @@ function SliderInput({
     onReject?.();
   };
 
+  const { language } = useLanguage();
+
   const actionButtonStyle: React.CSSProperties = {
     padding: "16px",
     fontSize: "1.2rem",
@@ -49,7 +53,7 @@ function SliderInput({
           fontSize: "1.2rem",
         }}
       >
-        Value: {value}
+        {language === "en" ? "Value: " + value : "Verdi: " + value}
       </label>
       <input
         id="slider"
@@ -61,7 +65,9 @@ function SliderInput({
         style={{ width: "100%", height: "40px" }}
       />
       <label htmlFor="writeIn" style={{ fontSize: "1.2rem" }}>
-        Or enter value manually (between {min} and {max}):
+        {language === "en"
+          ? "Or enter value manually (between " + min + " and " + max + "):"
+          : `Eller skriv inn et tall (mellom ${min} og ${max}):`}
       </label>
       <input
         id="writeIn"
@@ -86,10 +92,12 @@ function SliderInput({
       />
       <div className="Buttons-on-raise">
         <button onClick={handleConfirm} style={actionButtonStyle}>
-          Confirm bet
+          {language === "en" ? "Confirm bet" : "Bekreft innsats"}
         </button>
         <button onClick={handleReject} style={actionButtonStyle}>
-          Go back to call/fold
+          {language === "en"
+            ? "Go back to call/fold"
+            : "Gå tilbake til syn/kast"}
         </button>
       </div>
     </div>

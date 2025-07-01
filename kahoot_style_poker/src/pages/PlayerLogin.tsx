@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import AnimatedEllipsis from "../components/animatedEllipsis.tsx";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import norwegianFlag from "../assets/Norge.png";
+import americanFlag from "../assets/USA.png";
 
 function PlayerLogin() {
   const navigate = useNavigate();
@@ -14,6 +17,8 @@ function PlayerLogin() {
   const [avatar, setAvatar] = useState(() => {
     return sessionStorage.getItem("avatar") || "";
   });
+
+  const { language, toggleLanguage } = useLanguage();
 
   const [listOfAvatars, setListOfAvatars] = useState([
     "batman_logo",
@@ -106,6 +111,45 @@ function PlayerLogin() {
       <div style={{ marginTop: "100%" }}>
         <Aces />
       </div>
+      <div className="languageButton">
+        <button
+          onClick={toggleLanguage}
+          style={{
+            backgroundColor: "transparent",
+            borderColor: "transparent",
+            marginTop: "-10px",
+            /* marginRight: "10px", */
+            zIndex: 10,
+            height: "50px",
+            left: "10px",
+            padding: "0",
+            marginLeft: "-30px",
+            marginRight: "10px",
+          }}
+        >
+          {language === "no" ? (
+            <img
+              src={norwegianFlag}
+              alt="Avatar"
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+              }}
+            />
+          ) : (
+            <img
+              src={americanFlag}
+              alt="Avatar"
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+              }}
+            />
+          )}
+        </button>
+      </div>
 
       {!isReady ? (
         <div style={{ width: "100%", maxWidth: "400px" }}>
@@ -120,12 +164,14 @@ function PlayerLogin() {
               marginBottom: "10px",
             }}
           >
-            User {playerName} ready to play!
+            {language === "en"
+              ? `${playerName} ready to play!`
+              : `${playerName} klar for spill!`}
           </h2>
 
           {avatar === "" ? (
             <div>
-              <p>Choose avatar</p>
+              {language === "en" ? <p>Choose avatar</p> : <p>velg avatar</p>}
               <div>
                 <div
                   style={{
@@ -143,7 +189,9 @@ function PlayerLogin() {
                   />
                   <button onClick={() => viewAvatar(1)}>▶</button>
                 </div>
-                <button onClick={() => chooseAvatar()}>choose Avatar</button>
+                <button onClick={() => chooseAvatar()}>
+                  {language === "en" ? "Choose" : "Velg"}
+                </button>
               </div>
             </div>
           ) : (
@@ -157,7 +205,9 @@ function PlayerLogin() {
           )}
           {avatar !== "" && (
             <p style={{ fontSize: "1.2rem" }}>
-              Waiting for the host to start the game
+              {language === "en"
+                ? `Waiting for the host to start the game`
+                : `Venter på at spillet skal starte`}
               <AnimatedEllipsis />
             </p>
           )}

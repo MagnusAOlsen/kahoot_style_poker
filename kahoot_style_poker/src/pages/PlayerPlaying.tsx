@@ -3,11 +3,16 @@ import { useLocation } from "react-router-dom";
 import SliderInput from "../components/SliderInput";
 import React, { useState, useEffect, useRef } from "react";
 import { Card } from "../gameLogic/Card";
+import LanguageButton from "../components/LanguageButton";
+import { useLanguage } from "../context/LanguageContext";
+import norwegianFlag from "../assets/Norge.png";
+import americanFlag from "../assets/USA.png";
 
 function PlayerPlaying() {
   const socketRef = useRef<WebSocket | null>(null);
   const playerNameRef = useRef<string | null>(null);
   const location = useLocation();
+  const { language, toggleLanguage } = useLanguage();
 
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
   const [isMyTurnMessage, setIsMyTurnMessage] = useState(false);
@@ -105,6 +110,43 @@ function PlayerPlaying() {
           flexDirection: "row",
         }}
       >
+        <button
+          onClick={toggleLanguage}
+          style={{
+            backgroundColor: "transparent",
+            borderColor: "transparent",
+            padding: "0",
+            marginTop: "0px",
+            marginRight: "10px",
+          }}
+        >
+          {language === "no" ? (
+            <img
+              src={norwegianFlag}
+              alt="Avatar"
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                marginRight: "10px",
+                marginTop: "7px",
+              }}
+            />
+          ) : (
+            <img
+              src={americanFlag}
+              alt="Avatar"
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                marginRight: "10px",
+                marginTop: "7px",
+              }}
+            />
+          )}
+        </button>
+
         <img
           src={`../avatars/${myPlayer?.avatar}.png`}
           alt="Avatar"
@@ -121,6 +163,7 @@ function PlayerPlaying() {
             fontWeight: "bold",
             fontSize: "1.5rem",
             marginBottom: "20px",
+            marginRight: "45px",
           }}
         >
           {myPlayer?.name}: {myPlayer?.chips} kr
@@ -154,16 +197,16 @@ function PlayerPlaying() {
           }}
         >
           <button onClick={() => sendMove("call")} style={actionButtonStyle}>
-            Call
+            {language === "en" ? "Call" : "Syn"}
           </button>
           <button
             onClick={() => setIsRaiseActive(true)}
             style={actionButtonStyle}
           >
-            Raise
+            {language === "en" ? "Raise" : "Høyne"}
           </button>
           <button onClick={() => sendMove("fold")} style={actionButtonStyle}>
-            Fold
+            {language === "en" ? "Fold" : "Kast"}
           </button>
         </div>
       )}
@@ -183,7 +226,7 @@ function PlayerPlaying() {
             </button>
           )}
           <button onClick={() => sendMove("leave")} style={actionButtonStyle}>
-            Leave
+            {language === "en" ? "Leave Game" : "Forlat Spill"}
           </button>
         </div>
       )}
@@ -201,25 +244,25 @@ function PlayerPlaying() {
             onClick={() => sendShownCards("showLeftCard")}
             style={actionButtonStyle}
           >
-            Show left card
+            {language === "en" ? "Show left card" : "Vis venstre kort"}
           </button>
           <button
             onClick={() => sendShownCards("showRightCard")}
             style={actionButtonStyle}
           >
-            Show right card
+            {language === "en" ? "Show right card" : "Vis høyre kort"}
           </button>
           <button
             onClick={() => sendShownCards("showBothCards")}
             style={actionButtonStyle}
           >
-            Show both cards
+            {language === "en" ? "Show both cards" : "Vis begge kort"}
           </button>
           <button
             onClick={() => sendShownCards("showNone")}
             style={actionButtonStyle}
           >
-            Show none
+            {language === "en" ? "Show none" : "Ikke vis kort"}
           </button>
         </div>
       )}

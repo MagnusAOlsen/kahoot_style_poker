@@ -199,6 +199,17 @@ function main() {
           break;
         }
 
+        case 'showNone': {
+          if (player && game) {
+            player.showLeftCard = false;
+            player.showRightCard = false;
+            player.showBothCards = false;
+            broadcast(wss, { type: 'players', players });
+            broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
+            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+          }
+        }
+
         case 'addOn': {
           if (player) {
             player.addOn = true;
