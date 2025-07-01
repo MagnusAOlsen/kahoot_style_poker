@@ -204,6 +204,7 @@ function main() {
             player.showLeftCard = false;
             player.showRightCard = false;
             player.showBothCards = false;
+            player.showNone = true;
             broadcast(wss, { type: 'players', players });
             broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
             game.checkIfAllPlayersRevealed(); // ✅ trigger check

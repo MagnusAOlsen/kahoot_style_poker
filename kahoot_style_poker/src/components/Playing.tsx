@@ -25,7 +25,7 @@ function Playing({
   const centerY = 440;
 
   const curveRadiusX = 150;
-  const curveRadiusY = 170;
+  const curveRadiusY = 190;
   const bottomPlayerSpacing = 320;
 
   const totalSeats = 8;
@@ -39,7 +39,7 @@ function Playing({
     let y = centerY + curveRadiusY * Math.sin(angle);
     if (i === 0) {
       x -= 100;
-      y -= 20;
+      y -= 30;
     }
     seatPositions.push({ x, y });
   }
@@ -58,7 +58,7 @@ function Playing({
     let y = centerY + curveRadiusY * Math.sin(angle);
     if (i !== 0) {
       x += 100;
-      y -= 20;
+      y -= 30;
     }
     seatPositions.push({ x, y });
   }

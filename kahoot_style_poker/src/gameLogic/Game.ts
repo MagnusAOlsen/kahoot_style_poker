@@ -328,7 +328,7 @@ public waitForAllPlayersToReveal(): Promise<void> {
 public checkIfAllPlayersRevealed(): void {
   const playersToReveal = this.players.filter(p => !p.hasFolded);
   const allDone = playersToReveal.every(p =>
-    p.showLeftCard || p.showRightCard || p.showBothCards
+    p.showLeftCard || p.showRightCard || p.showBothCards || p.showNone
   );
 
   if (allDone && this.revealResolve) {

@@ -30,6 +30,7 @@ export class Player {
   public showLeftCard: boolean = false;
   public showRightCard: boolean = false;
   public showBothCards: boolean = false;
+  public showNone: boolean = false;
   public addOn: boolean = false;
   public leave: boolean = false;
   public avatar?: string;
@@ -105,5 +106,6 @@ export class Player {
     this.showLeftCard = false;
     this.showRightCard = false;
     this.showBothCards = false;
+    this.showNone = false;
   }
 }

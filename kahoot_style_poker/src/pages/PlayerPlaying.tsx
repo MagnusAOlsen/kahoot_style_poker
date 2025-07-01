@@ -222,7 +222,13 @@ function PlayerPlaying() {
         >
           {myPlayer.chips < 150 && (
             <button onClick={() => sendMove("addOn")} style={actionButtonStyle}>
-              {myPlayer?.chips === 0 ? "Rebuy to 150 kr" : "Add-on to 150 kr"}
+              {language === "en"
+                ? myPlayer && myPlayer.chips === 0
+                  ? "Rebuy to 150 kr"
+                  : "Add-on to 150 kr"
+                : myPlayer?.chips === 0
+                  ? "Kjøp deg inn for 150 kr"
+                  : "Kjøp deg opp til 150 kr"}
             </button>
           )}
           <button onClick={() => sendMove("leave")} style={actionButtonStyle}>
