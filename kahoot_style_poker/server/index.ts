@@ -44,16 +44,20 @@ async function playRound(game, wss, clients, dealerPosition) {
   }
 
   const rankings = game.rankPlayers();
-  await game.payOut(rankings, async (playerName) => {
-    const socket = [...clients.entries()].find(([_, name]) => name === playerName)?.[0];
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({ type: 'showFoldedCards' }));
+
+  for (const [socket, name] of clients.entries()) {
+    const player = game.players.find(p => p.name === name);
+    if (player && !player.hasFolded && player.hand.length > 0 && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'showFoldedCards'}));
     }
   }
-  );
   await game.waitForAllPlayersToReveal();
-  broadcast(wss, { type: "roundOver", rankings });
+  game.payOut(rankings)  
+    
 }
+  
+
+  
 
 function main() {
   const server = http.createServer();
@@ -146,7 +150,7 @@ function main() {
 
         case 'call': {
           if (player) {
-
+            player.called = true;
             player.respondToBet(-1);
               socket.send(JSON.stringify({ type: 'player', player }));
               broadcast(wss, { type: 'players', players: players });

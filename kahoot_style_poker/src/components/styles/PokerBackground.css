@@ -1,6 +1,6 @@
 .poker-wrapper {
     height: 100vh;
-    width: 105%;
+    width: 100%;
     position: absolute; 
     top: 0;
     left: 0;
@@ -21,6 +21,21 @@
     z-index: 0;
     overflow: hidden;
     width: "100%";
+  }
+
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Specifically handle body and html */
+  html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #0a1a2f; /* or your desired background */
+    overflow-x: hidden; /* Avoid horizontal scroll */
   }
   
   

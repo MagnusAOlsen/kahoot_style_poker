@@ -5,6 +5,7 @@ import { Player } from "../gameLogic/Player.ts";
 import { Card } from "../gameLogic/Card.ts";
 import React from "react";
 import dealer_button from "../assets/dealer_button.png";
+import crown from "../assets/crown.png";
 
 type PlayerProps = {
   x: number;
@@ -29,7 +30,29 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
           <p>{player.currentBet} kr</p>
         </div>
       )}
-
+      {player.called === true && player.currentBet === 0 && (
+        <div className="bet-box">
+          <p>Check</p>
+        </div>
+      )}
+      {player.hasFolded && (
+        <div className="bet-box">
+          <p
+            style={{
+              color: "rgb(229, 6, 6)",
+              fontSize: "50px",
+              fontWeight: "bold",
+            }}
+          >
+            Fold
+          </p>
+        </div>
+      )}
+      {player.winner && (
+        <div className="bet-box">
+          <img src={crown} style={{ width: "200px", marginLeft: "250px" }} />
+        </div>
+      )}
       <div className="player-cards">
         <div>
           {player.showLeftCard && (
@@ -61,7 +84,8 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
           )}
           {!player.showLeftCard &&
             !player.showRightCard &&
-            !player.showBothCards && (
+            !player.showBothCards &&
+            !player.hasFolded && (
               <>
                 <img
                   src={card_backside}

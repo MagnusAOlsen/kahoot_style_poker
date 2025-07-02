@@ -38,6 +38,8 @@ export class Player {
   public leave: boolean = false;
   public avatar?: string;
   public currentBet: number = 0;
+  public called: boolean = false;
+  public winner: boolean = false;
 
   constructor(name: string, startingChips: number = 150) {
     this.name = name;
@@ -110,5 +112,6 @@ export class Player {
     this.showRightCard = false;
     this.showBothCards = false;
     this.showNone = false;
+    this.winner = false;
   }
 }

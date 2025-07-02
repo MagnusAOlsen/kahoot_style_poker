@@ -15,6 +15,8 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   
   .language-toggle-button {
@@ -24,13 +26,18 @@
     margin-top: 0;
     margin-right: 10px;
   }
+
+  .action-buttons {
+    margin-top: 20px;
+  }
+
   
   .flag-img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
-    margin-top: 7px;
+    
   }
   
   .avatar-img {
@@ -38,21 +45,20 @@
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
-    margin-top: 7px;
   }
   
   .player-name {
     font-weight: bold;
     font-size: 1.5rem;
-    margin-bottom: 20px;
     margin-right: 45px;
+    margin-top: 8px;
   }
   
   .card-row {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     width: 100%;
   }
   
@@ -67,6 +73,11 @@
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
+  }
+
+
+  .buyin-leave-buttons {
+    margin-top: 15px;
   }
   
   

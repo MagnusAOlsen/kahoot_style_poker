@@ -23,8 +23,8 @@ button:active {
 .fold-leave-button {
     padding: 16px;
     font-size: 1.2rem;
-    background-color: "rgb(225, 44, 44)";
-    color: "black";
+    background-color: rgb(225, 44, 44);
+    color: black;
     border-radius: 50px;
     border: none;
     font-weight: bold;

@@ -179,12 +179,12 @@ function PlayerPlaying() {
           >
             {language === "en" ? "Show both cards" : "Vis begge kort"}
           </button>
-          <button
+          {/* <button
             onClick={() => sendShownCards("showNone")}
             className="action-button"
           >
             {language === "en" ? "Show none" : "Ikke vis kort"}
-          </button>
+          </button> */}
         </div>
       )}
 

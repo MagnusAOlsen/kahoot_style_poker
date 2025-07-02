@@ -123,6 +123,7 @@ export class Game {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     for (const player of this.players) {
       player.currentBet = 0;
+      player.called = false;
     };
 
     this.calculateSidePots(bets);
@@ -163,6 +164,8 @@ export class Game {
   
     smallBlindPlayer.betChips(smallBlindAmount);
     bigBlindPlayer.betChips(bigBlindAmount);
+    smallBlindPlayer.currentBet = smallBlindAmount;
+    bigBlindPlayer.currentBet = bigBlindAmount;
   }
 
   private calculateSidePots(bets: Map<Player, number>): void {
@@ -204,12 +207,7 @@ export class Game {
       .sort((a, b) => HandEvaluator.compareHands(a.hand, b.hand));
   }
 
-  async payOut(ranking: Ranking[], showFoldedCards: (playerName: string) => Promise<void>): Promise<void> {
-
-    const activePlayers = this.players.filter(p => !p.hasFolded && p.hand.length > 0);
-    for (const player of activePlayers) {
-      await showFoldedCards(player.name);
-    }
+  payOut(ranking: Ranking[]): void {
 
     for (const pot of this.pots) {
       const eligible = pot.eligiblePlayers.filter(p => !p.hasFolded);
@@ -218,6 +216,7 @@ export class Game {
       const winners = ranked.filter(r => HandEvaluator.compareHands(r.hand, bestHand) === 0).map(r => r.player);
       const share = pot.amount / winners.length;
       winners.forEach(player => player.receiveChips(Math.floor(share)));
+      winners.forEach(player => player.winner = true);
     }
 
     /* ranking.forEach(({ player, hand }, i) => {
