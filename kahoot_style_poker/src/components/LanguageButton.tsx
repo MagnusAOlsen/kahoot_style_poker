@@ -1,5 +1,6 @@
+import "./styles/General.css";
 import { useLanguage } from "../context/LanguageContext";
-import React, { useContext } from "react";
+import React from "react";
 import norwegianFlag from "../assets/Norge.png";
 import americanFlag from "../assets/USA.png";
 

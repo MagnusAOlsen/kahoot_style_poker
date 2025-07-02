@@ -1,6 +1,8 @@
-import * as readline from 'readline';
+/* import * as readline from 'readline'; */
 import { Card } from './Card.ts';
 
+
+//Used to check the game logic in terminal
 /* function askQuestion(query: string): Promise<string> {
     const rl = readline.createInterface({
       input: process.stdin,
@@ -14,6 +16,7 @@ import { Card } from './Card.ts';
       })
     );
   } */
+ 
 
 export class Player {
   hand: Card[] = [];

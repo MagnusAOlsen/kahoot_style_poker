@@ -1,5 +1,5 @@
 import { Card } from './Card.ts';
-import type { Suit, Rank } from './Card.ts';
+import type { Suit, Rank } from './Card.ts';
 
 export class Deck {
   public cards: Card[] = [];

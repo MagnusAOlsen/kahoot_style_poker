@@ -1,5 +1,6 @@
+import "./styles/SliderInput.css";
+import "./styles/General.css";
 import React, { useState, ChangeEvent } from "react";
-import "./SliderInput.css";
 import { useLanguage } from "../context/LanguageContext";
 
 type SliderInputProps = {
@@ -35,18 +36,6 @@ function SliderInput({
 
   const { language } = useLanguage();
 
-  const actionButtonStyle: React.CSSProperties = {
-    padding: "16px",
-    fontSize: "1.2rem",
-    backgroundColor: "#ffffff",
-    color: "#0b5e0b",
-    borderRadius: "50px",
-    border: "none",
-    fontWeight: "bold",
-    width: "100%",
-    marginBottom: "10px",
-  };
-
   return (
     <div style={{ width: "100%", marginRight: "10%" }}>
       <label
@@ -79,11 +68,7 @@ function SliderInput({
         value={value}
         onChange={(e) => {
           const newValue = Number(e.target.value);
-          if (newValue >= min && newValue <= max) {
-            setValue(newValue);
-          } else {
-            console.warn(`Value must be between ${min} and ${max}`);
-          }
+          setValue(newValue);
         }}
         style={{
           width: "100%",
@@ -93,10 +78,10 @@ function SliderInput({
         }}
       />
       <div className="Buttons-on-raise">
-        <button onClick={handleConfirm} style={actionButtonStyle}>
+        <button onClick={handleConfirm} className="action-button">
           {language === "en" ? "Confirm bet" : "Bekreft innsats"}
         </button>
-        <button onClick={handleReject} style={actionButtonStyle}>
+        <button onClick={handleReject} className="action-button">
           {language === "en"
             ? "Go back to call/fold"
             : "Gå tilbake til syn/kast"}

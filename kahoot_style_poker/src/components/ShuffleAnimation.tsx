@@ -1,8 +1,8 @@
-// components/ShuffleAnimation.tsx
-import React, { useEffect } from "react";
-import deckImage from "../assets/deck_of_cards.png";
 import "./styles/ShuffleAnimation.css";
+import React from "react";
+import deckImage from "../assets/deck_of_cards.png";
 
+//Shuffle animation between rounds
 function ShuffleAnimation() {
   return (
     <div

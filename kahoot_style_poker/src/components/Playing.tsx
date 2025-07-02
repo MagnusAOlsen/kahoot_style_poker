@@ -3,7 +3,6 @@ import deck_of_cards from "../assets/deck_of_cards.png";
 import PlayerOnBoard from "./PlayerOnBoard";
 import { Player } from "../gameLogic/Player.ts";
 import React from "react";
-import HA from "../assets/cards/HA.png";
 import { Card } from "../gameLogic/Card.ts";
 import thePot from "../assets/poker_chips.png";
 import ShuffleAnimation from "./ShuffleAnimation.tsx";
@@ -28,11 +27,9 @@ function Playing({
   const curveRadiusY = 190;
   const bottomPlayerSpacing = 320;
 
-  const totalSeats = 8;
   const seatPositions: { x: number; y: number }[] = [];
 
-  // Pre-calculate the seat positions for up to 8 players
-  // Right curve first (seats 0–1)
+  //Seat 1-2
   for (let i = 0; i < 2; i++) {
     const angle = 1.5 * Math.PI + (i / 1) * (Math.PI / 2); // 270° to 360°
     let x = centerX + 475 + curveRadiusX * Math.cos(angle);
@@ -46,7 +43,7 @@ function Playing({
     seatPositions.push({ x, y });
   }
 
-  // Bottom line (seats 2–5)
+  // Bottom line (seats 3-5)
   for (let i = 0; i < 3; i++) {
     const x = centerX + 1.25 * bottomPlayerSpacing - i * bottomPlayerSpacing;
     const y = centerY + 120 + curveRadiusY;
@@ -67,7 +64,6 @@ function Playing({
     seatPositions.push({ x, y });
   }
 
-  // 🎯 Use only as many positions as players
   const players = playersPlaying.map((player, i) => {
     const { x, y } = seatPositions[i];
     return <PlayerOnBoard key={i} x={x} y={y} player={player} />;

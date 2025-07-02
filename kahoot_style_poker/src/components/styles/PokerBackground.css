@@ -1,7 +1,7 @@
 .poker-wrapper {
     height: 100vh;
     width: 105%;
-    position: absolute; /* changed from relative */
+    position: absolute; 
     top: 0;
     left: 0;
     z-index: 0;
@@ -13,7 +13,7 @@
   
   .poker-background {
     flex: 1;
-    background-image: url('../assets/poker_table.jpg');
+    background-image: url('../../assets/poker_table.jpg');
     background-color: #b4c7be;
     background-position: center;
     background-repeat: no-repeat;

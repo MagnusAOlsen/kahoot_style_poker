@@ -2,6 +2,7 @@ import { WebSocketServer } from 'ws';
 import http from 'http';
 import { Player } from "../src/gameLogic/Player.ts";
 import { Game } from "../src/gameLogic/Game.ts";
+import ip from 'ip';
 
 async function broadcast(wss, message) {
   const msg = JSON.stringify(message);
@@ -16,7 +17,7 @@ async function playRound(game, wss, clients, dealerPosition) {
   broadcast(wss, { type: 'shuffling'});
   await new Promise(resolve => setTimeout(resolve, 2000));
   game.startNewRound(dealerPosition);
-  broadcast(wss, { type: 'players', players: game.players });
+  broadcast(wss, { type: 'players', players: game.players });
   for (const [socket, name] of clients.entries()) {
     const player = game.players.find(p => p.name === name);
     if (player && socket.readyState === WebSocket.OPEN) {
@@ -106,7 +107,7 @@ function main() {
                 }
               }
           
-              // ✅ Rotate dealer only to active players
+              // Rotate dealer only to active players
               do {
                 dealerPosition = (dealerPosition + 1) % players.length;
               } while (players[dealerPosition].chips === 0);
@@ -117,7 +118,7 @@ function main() {
           break;
         }
 
-
+        //Reconnect players after every move so the amount of chips is always correct
         case 'reconnect': {
           const reconnectingName = data.name;
           const reconnectingPlayer = players.find(p => p.name === reconnectingName);
@@ -171,7 +172,7 @@ function main() {
             player.showBothCards = false;
             broadcast(wss, { type: 'players', players });
             broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards() , potSize: game.getPot()});
-            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+            game.checkIfAllPlayersRevealed();
           }
           break;
         }
@@ -183,7 +184,7 @@ function main() {
             player.showBothCards = false;
             broadcast(wss, { type: 'players', players });
             broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
-            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+            game.checkIfAllPlayersRevealed(); 
           }
           break;
         }
@@ -194,7 +195,7 @@ function main() {
             player.showBothCards = true;
             broadcast(wss, { type: 'players', players });
             broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
-            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+            game.checkIfAllPlayersRevealed(); 
           }
           break;
         }
@@ -207,7 +208,7 @@ function main() {
             player.showNone = true;
             broadcast(wss, { type: 'players', players });
             broadcast(wss, { type: 'communityCards', cards: game.getCommunityCards(), potSize: game.getPot() });
-            game.checkIfAllPlayersRevealed(); // ✅ trigger check
+            game.checkIfAllPlayersRevealed(); 
           }
         }
 
@@ -240,8 +241,12 @@ function main() {
     });
   });
 
-  server.listen(3000, () => {
-    console.log('Server listening on http://192.168.86.28:3000');
+  const localIP = ip.address();
+  const port = 3000;
+  const url = `http://${localIP}:${port}/PlayerLogin`;
+
+  server.listen(port, () => {
+    console.log(`Server listening on ${url}`);
   });
 }
 

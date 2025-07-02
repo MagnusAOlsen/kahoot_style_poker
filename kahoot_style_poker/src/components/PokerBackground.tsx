@@ -1,5 +1,5 @@
+import "./styles/PokerBackground.css";
 import React from "react";
-import "./PokerBackground.css";
 
 function PokerBackground() {
   return (

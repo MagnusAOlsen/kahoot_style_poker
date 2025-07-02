@@ -1,0 +1,36 @@
+/* button:hover {
+    filter: brightness(0.8);
+} */
+
+button:active {
+    filter: brightness(0.6);
+}
+
+.action-button {
+    padding: 16px;
+    font-size: 1.2rem;
+    background-color: #ffffff;
+    color: #0b5e0b;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 10px;
+    cursor: pointer;
+    /* transition: filter 0.2s ease; */
+  }
+
+.fold-leave-button {
+    padding: 16px;
+    font-size: 1.2rem;
+    background-color: "rgb(225, 44, 44)";
+    color: "black";
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 10px;
+    /* cursor: pointer; */
+    /* transition: filter 0.2s ease; */
+  }
+

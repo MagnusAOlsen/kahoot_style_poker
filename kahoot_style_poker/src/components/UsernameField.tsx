@@ -1,3 +1,4 @@
+import "./styles/General.css";
 import { useState } from "react";
 import React from "react";
 import { useLanguage } from "../context/LanguageContext";
@@ -11,7 +12,7 @@ function UserNameField({ onSubmit }: UserNameFieldProps) {
     return sessionStorage.getItem("currentPlayer") || "";
   });
 
-  const { language, toggleLanguage } = useLanguage();
+  const { language } = useLanguage();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

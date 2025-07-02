@@ -1,15 +1,108 @@
-.betBox {
-    animation: popIn 0.3s ease-out;
+.player {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  justify-content: center;
+  align-items: center;
+}
+
+.bet-box {
+  position: absolute;
+  top: -15px;
+  left: -20px;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8) translateX(-50%);
+    opacity: 0;
   }
-  
-  @keyframes popIn {
-    from {
-      transform: scale(0.8) translateX(-50%);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1) translateX(-50%);
-      opacity: 1;
-    }
+  to {
+    transform: scale(1) translateX(-50%);
+    opacity: 1;
   }
-  
+}
+
+.bet-box img {
+  width: 40px;
+  margin-right: 5px;
+}
+
+.bet-box p {
+  color: white;
+  font-size: 25px;
+}
+
+.player-cards {
+  display: flex;
+  gap: 4px;
+}
+
+.card-large {
+  width: 105px;
+}
+
+.card-small {
+  width: 50px;
+}
+
+.card-margin-right {
+  margin-right: 3px;
+}
+
+.player-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(211, 196, 196, 0.95);
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.user-name {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-name img {
+  width: 45px;
+  margin-right: 5px;
+}
+
+.user-name h2 {
+  margin-right: 5px;
+}
+
+.blind-label {
+  color: black;
+  margin-left: 10px;
+}
+
+.dealer-button {
+  width: 45px;
+}
+
+.chips-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.chips-status img {
+  width: 45px;
+  margin-right: 5px;
+}
+
+.chips-status h2 {
+  color: black;
+  margin-right: 5px;
+}

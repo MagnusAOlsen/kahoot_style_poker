@@ -1,3 +1,4 @@
+import "./styles/General.css";
 import React from "react";
 import startIcon from "../assets/play_button.png";
 import { useNavigate } from "react-router-dom";

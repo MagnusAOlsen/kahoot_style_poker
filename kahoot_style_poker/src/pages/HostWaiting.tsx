@@ -1,3 +1,4 @@
+import "../components/styles/General.css";
 import { useEffect, useState, useRef } from "react";
 import PokerBackground from "../components/PokerBackground";
 import LoginField from "../components/LoginField";
@@ -9,9 +10,8 @@ import LanguageButton from "../components/LanguageButton";
 import { useLanguage } from "../context/LanguageContext";
 
 function HostWaiting() {
-  console.log("HostWaiting component rendered");
   const [currentPlayers, setCurrentPlayers] = useState<Player[]>(() => {
-    const storedPlayers = localStorage.getItem("currentPlayers");
+    const storedPlayers = sessionStorage.getItem("currentPlayers");
     try {
       const parsed = storedPlayers ? JSON.parse(storedPlayers) : [];
       return Array.isArray(parsed) ? parsed : [];
@@ -25,19 +25,15 @@ function HostWaiting() {
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
-    console.log("Conecting to WebSocket server...");
-    const socket = new WebSocket("ws://192.168.86.28:3000");
+    sessionStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
+    const socket = new WebSocket("ws://192.168.86.28:3000"); //Must change every time the server IP changes
     socketRef.current = socket;
 
     socket.onmessage = (msg) => {
-      console.log("Received message from server:", msg.data);
       const data = JSON.parse(msg.data);
       if (data.type === "players") {
         setCurrentPlayers(data.players);
-        console.log(localStorage.getItem("currentPlayers"));
-        localStorage.setItem("currentPlayers", JSON.stringify(data.players));
-        console.log(localStorage.getItem("currentPlayers"));
+        sessionStorage.setItem("currentPlayers", JSON.stringify(data.players));
       }
     };
 
@@ -47,7 +43,6 @@ function HostWaiting() {
   const startGame = () => {
     if (socketRef.current) {
       socketRef.current.send(JSON.stringify({ type: "startGame" }));
-      console.log("NÅ HAR JEG STARTA");
     }
   };
 

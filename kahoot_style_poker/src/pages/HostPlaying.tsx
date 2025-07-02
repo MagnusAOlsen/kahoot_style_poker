@@ -1,3 +1,4 @@
+import "../components/styles/General.css";
 import Playing from "../components/Playing";
 import { useLocation } from "react-router-dom";
 import { Player } from "../gameLogic/Player.ts";
@@ -5,8 +6,6 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { Card } from "../gameLogic/Card.ts";
 import MusicButton from "../components/MusicButton.tsx";
-import StartGameButton from "../components/StartGameButton.tsx";
-import { Game } from "../gameLogic/Game.ts";
 
 function HostPlaying() {
   const location = useLocation();
@@ -24,12 +23,11 @@ function HostPlaying() {
   const [shuffling, setShuffling] = useState<boolean>(false);
 
   useEffect(() => {
-    localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
-    const socket = new WebSocket("ws://192.168.86.28:3000");
+    sessionStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
+    const socket = new WebSocket("ws://192.168.86.28:3000"); //Must change every time the server IP changes
     socketRef.current = socket;
 
     socket.onmessage = (msg) => {
-      console.log("Received message from server:", msg.data);
       const data = JSON.parse(msg.data);
       if (data.type === "playerMove") {
         setCurrentPlayers(data.players);

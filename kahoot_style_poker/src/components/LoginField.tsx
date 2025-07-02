@@ -1,6 +1,6 @@
+import "./styles/LoginField.css";
 import React from "react";
-import "./LoginField.css";
-import Player from "../gameLogic/Player.ts";
+import { Player } from "../gameLogic/Player.ts";
 import AnimatedEllipsis from "./animatedEllipsis.tsx";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -9,7 +9,6 @@ type LoginFieldProps = {
 };
 
 function LoginField({ currentPlayers }: LoginFieldProps) {
-  console.log("currentPlayers prop in LoginField:", currentPlayers);
   const { language } = useLanguage();
 
   return (

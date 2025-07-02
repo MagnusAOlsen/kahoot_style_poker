@@ -1,3 +1,4 @@
+import "./styles/General.css";
 import React from "react";
 import musicImage from "../assets/music_image.png";
 import redCross from "../assets/red_cross.png";

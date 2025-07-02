@@ -1,9 +1,9 @@
+import "../components/styles/PlayerPlaying.css";
+import "../components/styles/General.css";
 import { Player } from "../gameLogic/Player";
-import { useLocation } from "react-router-dom";
 import SliderInput from "../components/SliderInput";
 import React, { useState, useEffect, useRef } from "react";
 import { Card } from "../gameLogic/Card";
-import LanguageButton from "../components/LanguageButton";
 import { useLanguage } from "../context/LanguageContext";
 import norwegianFlag from "../assets/Norge.png";
 import americanFlag from "../assets/USA.png";
@@ -11,7 +11,6 @@ import americanFlag from "../assets/USA.png";
 function PlayerPlaying() {
   const socketRef = useRef<WebSocket | null>(null);
   const playerNameRef = useRef<string | null>(null);
-  const location = useLocation();
   const { language, toggleLanguage } = useLanguage();
 
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
@@ -88,140 +87,60 @@ function PlayerPlaying() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#0a1a2f",
-        width: "100vw",
-        height: "100dvh",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        boxSizing: "border-box",
-        fontFamily: "Arial, sans-serif",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "row",
-        }}
-      >
-        <button
-          onClick={toggleLanguage}
-          style={{
-            backgroundColor: "transparent",
-            borderColor: "transparent",
-            padding: "0",
-            marginTop: "0px",
-            marginRight: "10px",
-          }}
-        >
-          {language === "no" ? (
-            <img
-              src={norwegianFlag}
-              alt="Avatar"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                marginRight: "10px",
-                marginTop: "7px",
-              }}
-            />
-          ) : (
-            <img
-              src={americanFlag}
-              alt="Avatar"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                marginRight: "10px",
-                marginTop: "7px",
-              }}
-            />
-          )}
+    <div className="player-playing-container">
+      <div className="top-bar">
+        <button onClick={toggleLanguage} className="language-toggle-button">
+          <img
+            src={language === "no" ? norwegianFlag : americanFlag}
+            alt="Language Flag"
+            className="flag-img"
+          />
         </button>
-
         <img
           src={`../avatars/${myPlayer?.avatar}.png`}
           alt="Avatar"
-          style={{
-            width: "40px",
-            height: "40px",
-            borderRadius: "50%",
-            marginRight: "10px",
-            marginTop: "7px",
-          }}
+          className="avatar-img"
         />
-        <h1
-          style={{
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            marginBottom: "20px",
-            marginRight: "45px",
-          }}
-        >
+        <h1 className="player-name">
           {myPlayer?.name}: {myPlayer?.chips} kr
         </h1>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "10px",
-          marginBottom: "30px",
-          width: "100%",
-        }}
-      >
+
+      <div className="card-row">
         {myPlayer?.hand?.map((card, i) => (
           <img
             key={i}
             src={getCardImage(card)}
-            style={{ width: "42vw", height: "auto", borderRadius: "12px" }}
+            className="card-img"
             alt={`Card ${i}`}
           />
         ))}
       </div>
+
       {canAct && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            width: "90%",
-          }}
-        >
-          <button onClick={() => sendMove("call")} style={actionButtonStyle}>
+        <div className="action-buttons">
+          <button onClick={() => sendMove("call")} className="action-button">
             {language === "en" ? "Call" : "Syn"}
           </button>
           <button
             onClick={() => setIsRaiseActive(true)}
-            style={actionButtonStyle}
+            className="action-button"
           >
             {language === "en" ? "Raise" : "Høyne"}
           </button>
-          <button onClick={() => sendMove("fold")} style={foldLeavButton}>
+          <button
+            onClick={() => sendMove("fold")}
+            className="fold-leave-button"
+          >
             {language === "en" ? "Fold" : "Kast"}
           </button>
         </div>
       )}
 
       {buyInorLeave && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            width: "90%",
-          }}
-        >
+        <div className="buyin-leave-buttons">
           {myPlayer.chips < 150 && (
-            <button onClick={() => sendMove("addOn")} style={actionButtonStyle}>
+            <button onClick={() => sendMove("addOn")} className="action-button">
               {language === "en"
                 ? myPlayer && myPlayer.chips === 0
                   ? "Rebuy to 150 kr"
@@ -231,42 +150,38 @@ function PlayerPlaying() {
                   : "Kjøp deg opp til 150 kr"}
             </button>
           )}
-          <button onClick={() => sendMove("leave")} style={foldLeavButton}>
+          <button
+            onClick={() => sendMove("leave")}
+            className="fold-leave-button"
+          >
             {language === "en" ? "Leave Game" : "Forlat Spill"}
           </button>
         </div>
       )}
 
       {showFoldedCards && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            width: "90%",
-          }}
-        >
+        <div className="folded-cards-buttons">
           <button
             onClick={() => sendShownCards("showLeftCard")}
-            style={actionButtonStyle}
+            className="action-button"
           >
             {language === "en" ? "Show left card" : "Vis venstre kort"}
           </button>
           <button
             onClick={() => sendShownCards("showRightCard")}
-            style={actionButtonStyle}
+            className="action-button"
           >
             {language === "en" ? "Show right card" : "Vis høyre kort"}
           </button>
           <button
             onClick={() => sendShownCards("showBothCards")}
-            style={actionButtonStyle}
+            className="action-button"
           >
             {language === "en" ? "Show both cards" : "Vis begge kort"}
           </button>
           <button
             onClick={() => sendShownCards("showNone")}
-            style={actionButtonStyle}
+            className="action-button"
           >
             {language === "en" ? "Show none" : "Ikke vis kort"}
           </button>
@@ -274,13 +189,7 @@ function PlayerPlaying() {
       )}
 
       {isRaiseActive && (
-        <div
-          style={{
-            width: "100%",
-            padding: "0 20px",
-            boxSizing: "border-box",
-          }}
-        >
+        <div className="raise-slider-wrapper">
           <SliderInput
             min={0}
             max={myPlayer?.chips || 0}
@@ -300,27 +209,5 @@ function PlayerPlaying() {
     </div>
   );
 }
-
-const actionButtonStyle: React.CSSProperties = {
-  padding: "16px",
-  fontSize: "1.2rem",
-  backgroundColor: "#ffffff",
-  color: "#0b5e0b",
-  borderRadius: "50px",
-  border: "none",
-  fontWeight: "bold",
-  width: "100%",
-};
-
-const foldLeavButton: React.CSSProperties = {
-  padding: "16px",
-  fontSize: "1.2rem",
-  backgroundColor: "rgb(225, 44, 44)",
-  color: "black",
-  borderRadius: "50px",
-  border: "none",
-  fontWeight: "bold",
-  width: "100%",
-};
 
 export default PlayerPlaying;

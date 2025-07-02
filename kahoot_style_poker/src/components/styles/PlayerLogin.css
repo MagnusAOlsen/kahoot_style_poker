@@ -1,0 +1,88 @@
+.player-login-container {
+    background-color: #0a1a2f;
+    width: 100vw;
+    height: 100dvh;
+    padding: 50px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
+  
+  .aces-wrapper {
+    margin-top: 325px;
+  }
+  
+  .language-button {
+    z-index: 10;
+    margin-top: -10px;
+    height: 50px;
+    margin-left: -30px;
+    margin-right: 10px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+  }
+  
+  .language-button img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .username-form-wrapper {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .player-ready-wrapper {
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  .player-ready-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .avatar-controls {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .avatar-button {
+    height: 40px;
+    width: 40px;
+    border-radius: 30%;
+    margin-top: 35px;
+    background-color: #ffffff;
+    color: #0b5e0b;
+    border: solid 2px black;
+    font-weight: bold;
+  }
+  
+  .avatar-image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .choose-avatar-button {
+    height: 40px;
+    width: 70px;
+    border-radius: 40%;
+    margin-top: 10px;
+    background-color: #ffffff;
+    color: #0b5e0b;
+    border: solid 2px black;
+    font-weight: bold;
+  }
+  
+  .waiting-text {
+    font-size: 1.2rem;
+  }
+  

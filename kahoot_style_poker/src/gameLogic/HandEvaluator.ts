@@ -170,9 +170,9 @@ static combinations<T>(arr: T[], k: number): T[][] {
 
 static bestOfSeven(cards: Card[]): EvaluatedHand {
     const hands = this.combinations(cards, 5);
-    const evaluated = hands.map(this.evaluateHand.bind(this));
+    const evaluated: EvaluatedHand[] = hands.map(this.evaluateHand.bind(this));
     evaluated.sort((a, b) => this.compareHands(a, b));
-    return evaluated[0];
+    return evaluated[0] as EvaluatedHand;
 }
 
 static compareHands(a: EvaluatedHand, b: EvaluatedHand): number {

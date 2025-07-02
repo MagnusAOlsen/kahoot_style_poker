@@ -1,3 +1,5 @@
+import "../components/styles/General.css";
+import "../components/styles/PlayerLogin.css";
 import Aces from "../components/Aces.tsx";
 import UserNameField from "../components/UsernameField.tsx";
 import { useState, useEffect, useRef } from "react";
@@ -20,7 +22,7 @@ function PlayerLogin() {
 
   const { language, toggleLanguage } = useLanguage();
 
-  const [listOfAvatars, setListOfAvatars] = useState([
+  const listOfAvatars: string[] = [
     "batman_logo",
     "lion",
     "lsk",
@@ -29,7 +31,7 @@ function PlayerLogin() {
     "professor",
     "red_bull",
     "spiderman",
-  ]);
+  ];
 
   const [isReady, setIsReady] = useState(() => {
     return sessionStorage.getItem("ready") === "true";
@@ -99,76 +101,28 @@ function PlayerLogin() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#0a1a2f",
-        width: "100vw",
-        height: "100dvh",
-        padding: "50px",
-        boxSizing: "border-box",
-        fontFamily: "Arial, sans-serif",
-        color: "white",
-        display: "flex",
-        flexDirection: "row",
-        overflow: "hidden",
-      }}
-    >
-      <div style={{ marginTop: "325px" }}>
+    <div className="player-login-container">
+      <div className="aces-wrapper">
         <Aces />
       </div>
+
       <div className="languageButton">
-        <button
-          onClick={toggleLanguage}
-          style={{
-            backgroundColor: "transparent",
-            borderColor: "transparent",
-            marginTop: "-10px",
-            /* marginRight: "10px", */
-            zIndex: 10,
-            height: "50px",
-            left: "10px",
-            padding: "0",
-            marginLeft: "-30px",
-            marginRight: "10px",
-          }}
-        >
+        <button onClick={toggleLanguage} className="language-button">
           {language === "no" ? (
-            <img
-              src={norwegianFlag}
-              alt="Avatar"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-              }}
-            />
+            <img src={norwegianFlag} alt="flag" />
           ) : (
-            <img
-              src={americanFlag}
-              alt="Avatar"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-              }}
-            />
+            <img src={americanFlag} alt="flag" />
           )}
         </button>
       </div>
 
       {!isReady ? (
-        <div style={{ width: "100%", maxWidth: "400px" }}>
+        <div className="username-form-wrapper">
           <UserNameField onSubmit={handleSubmit} />
         </div>
       ) : (
-        <div style={{ textAlign: "center", maxWidth: "400px" }}>
-          <h2
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              marginBottom: "10px",
-            }}
-          >
+        <div className="player-ready-wrapper">
+          <h2 className="player-ready-title">
             {language === "en"
               ? `${playerName} ready to play!`
               : `${playerName} klar for spill!`}
@@ -176,78 +130,39 @@ function PlayerLogin() {
 
           {avatar === "" ? (
             <div>
-              {language === "en" ? <p>Choose avatar</p> : <p>velg avatar</p>}
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button
-                    onClick={() => viewAvatar(-1)}
-                    style={{
-                      height: "40px",
-                      width: "40px",
-                      borderRadius: "30%",
-                      marginTop: "35px",
-                      backgroundColor: "#ffffff",
-                      color: "#0b5e0b",
-                      border: "solid 2px black",
-                    }}
-                  >
-                    ◀
-                  </button>
-                  <img
-                    src={avatarPath}
-                    alt="avatar preview"
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                  <button
-                    onClick={() => viewAvatar(1)}
-                    style={{
-                      height: "40px",
-                      width: "40px",
-                      borderRadius: "30%",
-                      marginTop: "35px",
-                      backgroundColor: "#ffffff",
-                      color: "#0b5e0b",
-                      border: "solid 2px black",
-                    }}
-                  >
-                    ▶
-                  </button>
-                </div>
+              <p>{language === "en" ? "Choose avatar" : "velg avatar"}</p>
+              <div className="avatar-controls">
                 <button
-                  onClick={() => chooseAvatar()}
-                  style={{
-                    height: "40px",
-                    width: "70px",
-                    borderRadius: "40%",
-                    marginTop: "10px",
-                    backgroundColor: "#ffffff",
-                    color: "#0b5e0b",
-                    border: "solid 2px black",
-                    fontWeight: "bold",
-                  }}
+                  onClick={() => viewAvatar(-1)}
+                  className="avatar-button"
                 >
-                  {language === "en" ? "Choose" : "Velg"}
+                  ◀
+                </button>
+                <img
+                  src={avatarPath}
+                  alt="avatar preview"
+                  className="avatar-image"
+                />
+                <button onClick={() => viewAvatar(1)} className="avatar-button">
+                  ▶
                 </button>
               </div>
+              <button onClick={chooseAvatar} className="choose-avatar-button">
+                {language === "en" ? "Choose" : "Velg"}
+              </button>
             </div>
           ) : (
             <div>
               <img
                 src={avatarPath}
-                style={{ width: "100px" }}
+                className="avatar-image"
                 alt="Selected avatar"
               />
             </div>
           )}
+
           {avatar !== "" && (
-            <p style={{ fontSize: "1.2rem" }}>
+            <p className="waiting-text">
               {language === "en"
                 ? `Waiting for the host to start the game`
                 : `Venter på at spillet skal starte`}
@@ -259,16 +174,5 @@ function PlayerLogin() {
     </div>
   );
 }
-
-const actionButtonStyle: React.CSSProperties = {
-  padding: "16px",
-  fontSize: "1.2rem",
-  backgroundColor: "#ffffff",
-  color: "#0b5e0b",
-  borderRadius: "50px",
-  border: "none",
-  fontWeight: "bold",
-  width: "100%",
-};
 
 export default PlayerLogin;
