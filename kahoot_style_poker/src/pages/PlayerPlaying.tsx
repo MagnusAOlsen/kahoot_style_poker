@@ -205,7 +205,7 @@ function PlayerPlaying() {
           >
             {language === "en" ? "Raise" : "Høyne"}
           </button>
-          <button onClick={() => sendMove("fold")} style={actionButtonStyle}>
+          <button onClick={() => sendMove("fold")} style={foldLeavButton}>
             {language === "en" ? "Fold" : "Kast"}
           </button>
         </div>
@@ -231,7 +231,7 @@ function PlayerPlaying() {
                   : "Kjøp deg opp til 150 kr"}
             </button>
           )}
-          <button onClick={() => sendMove("leave")} style={actionButtonStyle}>
+          <button onClick={() => sendMove("leave")} style={foldLeavButton}>
             {language === "en" ? "Leave Game" : "Forlat Spill"}
           </button>
         </div>
@@ -306,6 +306,17 @@ const actionButtonStyle: React.CSSProperties = {
   fontSize: "1.2rem",
   backgroundColor: "#ffffff",
   color: "#0b5e0b",
+  borderRadius: "50px",
+  border: "none",
+  fontWeight: "bold",
+  width: "100%",
+};
+
+const foldLeavButton: React.CSSProperties = {
+  padding: "16px",
+  fontSize: "1.2rem",
+  backgroundColor: "rgb(225, 44, 44)",
+  color: "black",
   borderRadius: "50px",
   border: "none",
   fontWeight: "bold",

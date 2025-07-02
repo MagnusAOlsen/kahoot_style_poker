@@ -88,7 +88,12 @@ function PlayerLogin() {
   };
 
   const viewAvatar = (index: number): void => {
-    let index2 = (currentIndex + index) % listOfAvatars.length;
+    let index2: number;
+    if (currentIndex + index < 0) {
+      index2 = listOfAvatars.length - 1;
+    } else {
+      index2 = (currentIndex + index) % listOfAvatars.length;
+    }
     setAvatarPath(`../avatars/${listOfAvatars[index2]}.png`);
     setCurrentIndex(index2);
   };
@@ -108,7 +113,7 @@ function PlayerLogin() {
         overflow: "hidden",
       }}
     >
-      <div style={{ marginTop: "100%" }}>
+      <div style={{ marginTop: "325px" }}>
         <Aces />
       </div>
       <div className="languageButton">
@@ -181,15 +186,53 @@ function PlayerLogin() {
                     justifyContent: "center",
                   }}
                 >
-                  <button onClick={() => viewAvatar(-1)}>◀</button>
+                  <button
+                    onClick={() => viewAvatar(-1)}
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      borderRadius: "30%",
+                      marginTop: "35px",
+                      backgroundColor: "#ffffff",
+                      color: "#0b5e0b",
+                      border: "solid 2px black",
+                    }}
+                  >
+                    ◀
+                  </button>
                   <img
                     src={avatarPath}
                     alt="avatar preview"
                     style={{ width: "100px", height: "100px" }}
                   />
-                  <button onClick={() => viewAvatar(1)}>▶</button>
+                  <button
+                    onClick={() => viewAvatar(1)}
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      borderRadius: "30%",
+                      marginTop: "35px",
+                      backgroundColor: "#ffffff",
+                      color: "#0b5e0b",
+                      border: "solid 2px black",
+                    }}
+                  >
+                    ▶
+                  </button>
                 </div>
-                <button onClick={() => chooseAvatar()}>
+                <button
+                  onClick={() => chooseAvatar()}
+                  style={{
+                    height: "40px",
+                    width: "70px",
+                    borderRadius: "40%",
+                    marginTop: "10px",
+                    backgroundColor: "#ffffff",
+                    color: "#0b5e0b",
+                    border: "solid 2px black",
+                    fontWeight: "bold",
+                  }}
+                >
                   {language === "en" ? "Choose" : "Velg"}
                 </button>
               </div>
@@ -216,5 +259,16 @@ function PlayerLogin() {
     </div>
   );
 }
+
+const actionButtonStyle: React.CSSProperties = {
+  padding: "16px",
+  fontSize: "1.2rem",
+  backgroundColor: "#ffffff",
+  color: "#0b5e0b",
+  borderRadius: "50px",
+  border: "none",
+  fontWeight: "bold",
+  width: "100%",
+};
 
 export default PlayerLogin;

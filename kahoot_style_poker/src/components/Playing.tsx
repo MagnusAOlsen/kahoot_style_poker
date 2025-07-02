@@ -35,18 +35,20 @@ function Playing({
   // Right curve first (seats 0–1)
   for (let i = 0; i < 2; i++) {
     const angle = 1.5 * Math.PI + (i / 1) * (Math.PI / 2); // 270° to 360°
-    let x = centerX + 575 + curveRadiusX * Math.cos(angle);
+    let x = centerX + 475 + curveRadiusX * Math.cos(angle);
     let y = centerY + curveRadiusY * Math.sin(angle);
     if (i === 0) {
-      x -= 100;
-      y -= 30;
+      x -= 90;
+      y -= 50;
+    } else {
+      y += 20;
     }
     seatPositions.push({ x, y });
   }
 
   // Bottom line (seats 2–5)
-  for (let i = 0; i < 4; i++) {
-    const x = centerX + 1.85 * bottomPlayerSpacing - i * bottomPlayerSpacing;
+  for (let i = 0; i < 3; i++) {
+    const x = centerX + 1.25 * bottomPlayerSpacing - i * bottomPlayerSpacing;
     const y = centerY + 120 + curveRadiusY;
     seatPositions.push({ x, y });
   }
@@ -57,8 +59,10 @@ function Playing({
     let x = centerX - 350 + curveRadiusX * Math.cos(angle);
     let y = centerY + curveRadiusY * Math.sin(angle);
     if (i !== 0) {
-      x += 100;
-      y -= 30;
+      x += 90;
+      y -= 50;
+    } else {
+      y += 30;
     }
     seatPositions.push({ x, y });
   }
@@ -108,7 +112,7 @@ function Playing({
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 5,
-          marginTop: "100px",
+          marginTop: "90px",
           marginLeft: "20px",
         }}
       >

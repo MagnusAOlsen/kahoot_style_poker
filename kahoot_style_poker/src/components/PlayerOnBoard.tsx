@@ -69,7 +69,7 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
                 <img
                   src={getCardImage(player.hand[0])}
                   style={{
-                    width: "120px",
+                    width: "115px",
                     marginRight: "3px",
                   }}
                 />
@@ -84,7 +84,7 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
                 />
                 <img
                   src={getCardImage(player.hand[1])}
-                  style={{ width: "120px" }}
+                  style={{ width: "115px" }}
                 />
               </>
             )}
@@ -92,11 +92,11 @@ function PlayerOnBoard({ x, y, player }: PlayerProps) {
               <>
                 <img
                   src={getCardImage(player.hand[0])}
-                  style={{ width: "120px", marginRight: "3px" }}
+                  style={{ width: "105px", marginRight: "3px" }}
                 />
                 <img
                   src={getCardImage(player.hand[1])}
-                  style={{ width: "120px" }}
+                  style={{ width: "105px" }}
                 />
               </>
             )}

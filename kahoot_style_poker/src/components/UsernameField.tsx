@@ -8,7 +8,7 @@ type UserNameFieldProps = {
 
 function UserNameField({ onSubmit }: UserNameFieldProps) {
   const [newPlayer, setNewPlayer] = useState(() => {
-    return localStorage.getItem("currentPlayer") || "";
+    return sessionStorage.getItem("currentPlayer") || "";
   });
 
   const { language, toggleLanguage } = useLanguage();
@@ -16,7 +16,7 @@ function UserNameField({ onSubmit }: UserNameFieldProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (newPlayer.trim() === "") return;
-    localStorage.setItem("currentPlayer", newPlayer.trim());
+    sessionStorage.setItem("currentPlayer", newPlayer.trim());
     onSubmit(newPlayer.trim());
   }
 
