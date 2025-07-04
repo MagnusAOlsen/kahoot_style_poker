@@ -44,8 +44,8 @@ This will run the setup file. It will install necesseary packages and libraries,
 
 6. The game continues until only one player remains with chips. Players take turns and compete in classic Texas Hold'em format.
 
-![image](kahoot_style_poker/public/readmeImages/in_round.png)
-![image](kahoot_style_poker/public/readmeImages/round_over.png)
+   ![image](kahoot_style_poker/public/readmeImages/in_round.png)
+   ![image](kahoot_style_poker/public/readmeImages/round_over.png)
 
 ## Player guide
 

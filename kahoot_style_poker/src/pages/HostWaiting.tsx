@@ -26,7 +26,7 @@ function HostWaiting() {
 
   useEffect(() => {
     sessionStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
-    const socket = new WebSocket("ws://192.168.50.76:3000"); //Must change every time the server IP changes
+    const socket = new WebSocket("ws://YourIPAddress:3000"); //Must change every time the server IP changes
     socketRef.current = socket;
 
     socket.onmessage = (msg) => {

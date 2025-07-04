@@ -30,7 +30,7 @@ function PlayerPlaying() {
     !isMyTurnMessage && myPlayer !== null && !isRaiseActive && !showFoldedCards;
 
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.50.76:3000");
+    const socket = new WebSocket("ws://yourIPAddress:3000");
     socketRef.current = socket;
 
     const playerName = sessionStorage.getItem("currentPlayer");
