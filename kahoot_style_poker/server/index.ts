@@ -75,7 +75,7 @@ function main() {
 
       switch (data.type) {
         case 'join': {
-          if (!players.find(p => p.name === data.name) && players.length < 8) {
+          if (!players.find(p => p.name === data.name) && players.length < 7) {
             const newPlayer = new Player(data.name);
             players.push(newPlayer);
           }

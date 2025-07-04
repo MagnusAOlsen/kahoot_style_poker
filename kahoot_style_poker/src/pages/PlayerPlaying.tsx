@@ -30,7 +30,7 @@ function PlayerPlaying() {
     !isMyTurnMessage && myPlayer !== null && !isRaiseActive && !showFoldedCards;
 
   useEffect(() => {
-    const socket = new WebSocket("ws://yourIPAdress:3000");
+    const socket = new WebSocket("ws://192.168.50.76:3000");
     socketRef.current = socket;
 
     const playerName = sessionStorage.getItem("currentPlayer");
@@ -117,7 +117,6 @@ function PlayerPlaying() {
           />
         ))}
       </div>
-
       {showInfo && (
         <div
           className="info-modal"
@@ -138,7 +137,6 @@ function PlayerPlaying() {
           />
         </div>
       )}
-
       {canAct && (
         <div className="action-buttons">
           <button onClick={() => sendMove("call")} className="action-button">
@@ -179,14 +177,16 @@ function PlayerPlaying() {
           </button>
         </div>
       )}
-      <div className="info-button">
-        <button
-          onClick={() => setShowInfo(!showInfo)}
-          className="action-button"
-        >
-          {language === "en" ? "Hand ranking" : "Rangering av hånd"}
-        </button>
-      </div>
+      {!isRaiseActive && (
+        <div className="info-button">
+          <button
+            onClick={() => setShowInfo(!showInfo)}
+            className="action-button"
+          >
+            {language === "en" ? "Hand ranking" : "Rangering av hånd"}
+          </button>
+        </div>
+      )}
 
       {showFoldedCards && (
         <div className="folded-cards-buttons">

@@ -26,7 +26,7 @@ function LoginField({ currentPlayers }: LoginFieldProps) {
             <li key={index}>{player.name}</li>
           ))}
         </ul>
-        {currentPlayers.length < 8 && (
+        {currentPlayers.length < 7 && (
           <p>
             {language === "en"
               ? "Waiting for players to join"
@@ -34,7 +34,7 @@ function LoginField({ currentPlayers }: LoginFieldProps) {
             <AnimatedEllipsis />
           </p>
         )}
-        {currentPlayers.length === 8 &&
+        {currentPlayers.length === 7 &&
           (language === "en" ? (
             <p>Lobby full! Let's start</p>
           ) : (
