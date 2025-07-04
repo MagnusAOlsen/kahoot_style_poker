@@ -7,6 +7,7 @@ import { Card } from "../gameLogic/Card";
 import { useLanguage } from "../context/LanguageContext";
 import norwegianFlag from "../assets/Norge.png";
 import americanFlag from "../assets/USA.png";
+import handRanking from "../assets/hand_ranking.png";
 
 function PlayerPlaying() {
   const socketRef = useRef<WebSocket | null>(null);
@@ -17,6 +18,7 @@ function PlayerPlaying() {
   const [isMyTurnMessage, setIsMyTurnMessage] = useState(false);
   const [isRaiseActive, setIsRaiseActive] = useState(false);
   const [showFoldedCards, setShowFoldedCards] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
 
   const canAct =
     isMyTurnMessage &&
@@ -28,7 +30,7 @@ function PlayerPlaying() {
     !isMyTurnMessage && myPlayer !== null && !isRaiseActive && !showFoldedCards;
 
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.86.28:3000");
+    const socket = new WebSocket("ws://yourIPAdress:3000");
     socketRef.current = socket;
 
     const playerName = sessionStorage.getItem("currentPlayer");
@@ -105,7 +107,6 @@ function PlayerPlaying() {
           {myPlayer?.name}: {myPlayer?.chips} kr
         </h1>
       </div>
-
       <div className="card-row">
         {myPlayer?.hand?.map((card, i) => (
           <img
@@ -116,6 +117,27 @@ function PlayerPlaying() {
           />
         ))}
       </div>
+
+      {showInfo && (
+        <div
+          className="info-modal"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+            padding: "2px",
+            borderRadius: "8px",
+          }}
+        >
+          <img
+            src={handRanking}
+            alt="Hand Ranking"
+            style={{ maxWidth: "90vw", maxHeight: "90vh" }}
+          />
+        </div>
+      )}
 
       {canAct && (
         <div className="action-buttons">
@@ -136,7 +158,6 @@ function PlayerPlaying() {
           </button>
         </div>
       )}
-
       {buyInorLeave && (
         <div className="buyin-leave-buttons">
           {myPlayer.chips < 150 && (
@@ -158,6 +179,14 @@ function PlayerPlaying() {
           </button>
         </div>
       )}
+      <div className="info-button">
+        <button
+          onClick={() => setShowInfo(!showInfo)}
+          className="action-button"
+        >
+          {language === "en" ? "Hand ranking" : "Rangering av hånd"}
+        </button>
+      </div>
 
       {showFoldedCards && (
         <div className="folded-cards-buttons">
@@ -187,7 +216,6 @@ function PlayerPlaying() {
           </button> */}
         </div>
       )}
-
       {isRaiseActive && (
         <div className="raise-slider-wrapper">
           <SliderInput
