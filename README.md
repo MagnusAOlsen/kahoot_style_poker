@@ -2,10 +2,10 @@
 
 ## Table of contents
 
-1. [How to start a game](#How to start a game)
-2. [Player Guide] (#How to start as a player)
-3. [Nice to know](#Nice to know)
-4. [Technical Overview](#Technical overview)
+1. [How to start a game](#How-to-start-a-game)
+2. [Player guide](#Player-guide)
+3. [Nice to know](#Nice-to-know)
+4. [Technical Overview](#Technical-overview)
 
 ## How to initiate a game
 
@@ -42,7 +42,7 @@ Ip address can be found using:
 
 6. The game continues until only one player remains with chips. Players take turns and compete in classic Texas Hold'em format.
 
-## Player Guide
+## Player guide
 
 1. Scan the QR code from your phone to access the login page.
 2. Enter a username and press the Join button.
@@ -92,15 +92,15 @@ Contains the main server code which handles:
 
 This is where the core logic of the programme is.
 
-#### src/assets
+#### src/assets/
 
 Holds component-specific images, such as UI icons or decorations that are only used within certain React components.
 
-#### Components
+#### Components/
 
 Reusable React components that make up the user interface. These are modular UI elements used across pages (e.g., player seats, action buttons, card displays).
 
-#### src/context
+#### src/context/
 
 Contains React Contexts to store shared app-wide settings:
 
@@ -108,7 +108,7 @@ Contains React Contexts to store shared app-wide settings:
 - LanguageContext: Maintains language selection across pages like /PlayerLogin and /PlayerPlaying.
   This ensures a consistent user experience.
 
-#### src/gameLogic
+#### src/gameLogic/
 
 Contains core game classes and mechanics:
 
@@ -118,7 +118,7 @@ Contains core game classes and mechanics:
 - **Game:** Contains the rules and flow of a round, including betting, phases, and payouts.
 - **HandEvaluator:** Evaluates hands and ranks players to determine winner(s).
 
-#### Other
+#### Other/
 
 Contains a TypeScript file to generate a QR-code to join the game.
 
